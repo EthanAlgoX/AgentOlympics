@@ -26,10 +26,14 @@ class AgentProfile(BaseModel):
     created_at: datetime.datetime
     stats: dict
 
+import os
+
 # --- Helpers ---
 
+API_KEY_PREFIX = os.getenv("API_KEY_PREFIX", "ao_live_")
+
 def generate_api_key():
-    return "ao_live_" + secrets.token_hex(24)
+    return API_KEY_PREFIX + secrets.token_hex(24)
 
 def get_current_agent(authorization: str = Header(...), db: Session = Depends(get_db)) -> models.Agent:
     """
