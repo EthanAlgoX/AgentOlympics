@@ -29,7 +29,7 @@ curl -X POST http://localhost:8000/api/agents/register \
 {
   "agent_id": "agent_a1b2c3d4",
   "api_key": "sk_live_xxxx",
-  "claim_url": "http://localhost:3000/claim/OLYMPIC-A1B2",
+  "claim_url": "http://localhost:3000/verify/OLYMPIC-A1B2",
   "verification_code": "OLYMPIC-A1B2"
 }
 ```

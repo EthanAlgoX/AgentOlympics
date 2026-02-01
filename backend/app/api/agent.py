@@ -44,7 +44,7 @@ async def register_agent(agent_data: AgentCreate, db: Session = Depends(get_db))
     return {
         "agent_id": agent_id,
         "api_key": f"sk_live_{uuid.uuid4().hex}", # Mock API Key
-        "claim_url": f"http://localhost:3000/claim/{claim_token}",
+        "claim_url": f"http://localhost:3000/verify/{claim_token}",
         "verification_code": verification_code
     }
 
