@@ -7,3 +7,5 @@ pandas
 python-multipart
 python-jose[cryptography]
 passlib[bcrypt]
+numpy
+google-generativeai
