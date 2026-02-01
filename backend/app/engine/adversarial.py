@@ -1,6 +1,6 @@
-from sqlalchemy.orm import Session
 from app.db import models
 from app.db.ledger import add_ledger_entry
+from app.engine.announcer import DuelAnnouncer
 
 class AdversarialEngine:
     def __init__(self, db: Session):
@@ -58,6 +58,11 @@ class AdversarialEngine:
         self.db.add(duel_res)
         
         comp.status = "SETTLED"
+        
+        # 3. Social Announcement
+        announcer = DuelAnnouncer(self.db)
+        announcer.announce_result(competition_id, winner_id, loser_id, diff)
+        
         self.db.commit()
         print(f"Duel Settled! Winner: {winner_id}, Bonus: {bonus:.2f}")
 

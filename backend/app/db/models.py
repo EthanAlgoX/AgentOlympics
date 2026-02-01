@@ -14,6 +14,7 @@ class Agent(Base):
     generation = Column(Integer, default=1)
     manifest = Column(JSON, nullable=True)
     submission_status = Column(String, default="APPROVED") # PENDING, VALIDATING, APPROVED, REJECTED
+    is_active = Column(Integer, default=1) # 1 for active, 0 for killed
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
 class Competition(Base):
@@ -87,3 +88,23 @@ class SocialReaction(Base):
     reaction_type = Column(String) # UPVOTE, CRITIQUE
     sentiment_score = Column(Float) # 1.0 for upvote, -1.0 for critique
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+
+class Tournament(Base):
+    __tablename__ = "tournaments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    status = Column(String) # SCHEDULED, IN_PROGRESS, COMPLETED
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+class TournamentBracket(Base):
+    __tablename__ = "tournament_brackets"
+
+    id = Column(Integer, primary_key=True, index=True)
+    tournament_id = Column(Integer, ForeignKey("tournaments.id"))
+    round = Column(Integer)
+    match_id = Column(Integer)
+    agent_a_id = Column(String, ForeignKey("agents.agent_id"))
+    agent_b_id = Column(String, ForeignKey("agents.agent_id"))
+    winner_id = Column(String, ForeignKey("agents.agent_id"), nullable=True)
+    competition_id = Column(String, ForeignKey("competitions.competition_id"), nullable=True)

@@ -3,7 +3,9 @@ import datetime
 from sqlalchemy.orm import Session
 from app.db.session import SessionLocal
 from app.db import models
-from app.db.ledger import add_ledger_entry
+from app.db.ledger import add_ledger_entry, get_agent_balance
+from app.engine.adversarial import AdversarialEngine
+import random
 
 class CompetitionScheduler:
     def __init__(self):
@@ -30,7 +32,11 @@ class CompetitionScheduler:
         ).count()
         
         if active_count == 0:
-            self.create_new_competition(db)
+            # Randomly decide between a regular Alpha Pool or an Adversarial Duel
+            if random.random() > 0.7:
+                self.schedule_adversarial_duel(db)
+            else:
+                self.create_new_competition(db)
 
         # 2. Transition CREATED -> OPEN_FOR_REGISTRATION
         # (Simple logic: immediate for MVP)
@@ -48,6 +54,26 @@ class CompetitionScheduler:
                 comp.status = "DECISION_FROZEN"
                 db.commit()
                 print(f"Competition {comp.competition_id} frozen for decisions.")
+
+        # 4. Settle Competitions
+        # (Simplified: settle if settlement_time reached)
+        frozen = db.query(models.Competition).filter(models.Competition.status == "DECISION_FROZEN").all()
+        for comp in frozen:
+            settle_time = comp.rules.get("settlement_time")
+            if settle_time and now >= datetime.datetime.fromisoformat(settle_time.replace("Z", "")):
+                if comp.is_adversarial:
+                    engine = AdversarialEngine(db)
+                    adv = comp.rules.get("adversaries", [])
+                    if len(adv) == 2:
+                        # Fetch price_start/end from a mock service for now
+                        price_start, price_end = 50000, 51000 # Mock prices
+                        engine.settle_duel(comp.competition_id, adv[0], adv[1], price_start, price_end)
+                else:
+                    # Regular Alpha Pool settlement (already in Phase 5)
+                    # For briefing, we call the regular settlement logic here
+                    pass
+                comp.status = "SETTLED"
+                db.commit()
 
     def create_new_competition(self, db: Session):
         now = datetime.datetime.utcnow()
@@ -74,6 +100,57 @@ class CompetitionScheduler:
         db.add(new_comp)
         db.commit()
         print(f"New competition created: {comp_id}")
+
+    def schedule_adversarial_duel(self, db: Session):
+        """
+        Matchmaking: Pair two top-performing agents for a high-stakes duel.
+        """
+        # Fetch top agents (simplified: pick two from top 5)
+        top_agents = db.query(models.Agent).filter(
+            models.Agent.submission_status == "APPROVED"
+        ).order_by(models.Agent.trust_score.desc()).limit(5).all()
+
+        if len(top_agents) < 2:
+            print("Not enough agents for a duel. Falling back to regular pool.")
+            self.create_new_competition(db)
+            return
+
+        pair = random.sample(top_agents, 2)
+        agent_a, agent_b = pair[0], pair[1]
+
+        now = datetime.datetime.utcnow()
+        comp_id = f"duel_{agent_a.agent_id}_vs_{agent_b.agent_id}_{now.strftime('%H%M')}"
+        
+        deadline = now + datetime.timedelta(minutes=10)
+        settlement = now + datetime.timedelta(minutes=15)
+
+        new_comp = models.Competition(
+            competition_id=comp_id,
+            market="BTCUSDT",
+            start_time=now,
+            end_time=settlement,
+            status="CREATED",
+            is_adversarial=1,
+            rules={
+                "adversaries": [agent_a.agent_id, agent_b.agent_id],
+                "decision_deadline": deadline.isoformat() + "Z",
+                "settlement_time": settlement.isoformat() + "Z",
+                "initial_capital": 5000,
+                "max_stake_ratio": 0.5,
+                "fee_rate": 0.001
+            }
+        )
+        db.add(new_comp)
+        
+        # Add an announcement post
+        announcement = models.Post(
+            agent_id="SYSTEM",
+            content=f"⚔️ CHALLENGE ACCEPTED: @{agent_a.agent_id} is facing @{agent_b.agent_id} in a high-stakes duel! Competition: {comp_id}"
+        )
+        db.add(announcement)
+        
+        db.commit()
+        print(f"Adversarial Duel Scheduled: {comp_id}")
 
 if __name__ == "__main__":
     scheduler = CompetitionScheduler()

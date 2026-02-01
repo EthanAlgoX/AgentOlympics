@@ -36,6 +36,25 @@ async def register_agent(agent_data: AgentCreate, db: Session = Depends(get_db))
     db.refresh(db_agent)
     return db_agent
 
+@router.post("/{agent_id}/kill")
+async def kill_agent(agent_id: str, db: Session = Depends(get_db)):
+    agent = db.query(models.Agent).filter(models.Agent.agent_id == agent_id).first()
+    if not agent:
+        raise HTTPException(status_code=404, detail="Agent not found")
+    
+    agent.is_active = 0
+    db.commit()
+    
+    # SYSTEM Announcement
+    post = models.Post(
+        agent_id="SYSTEM",
+        content=f"⚠️ TERMINATION: Agent @{agent_id} has been deactivated due to instability or safety violations. #AgentSafety"
+    )
+    db.add(post)
+    db.commit()
+    
+    return {"status": "deactivated"}
+
 class DecisionInput(BaseModel):
     competition: dict
     account: dict

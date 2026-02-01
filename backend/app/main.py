@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.session import engine
 from app.db import models
-from app.api import agent, leaderboard, competition, evolution, social
+from app.api import agent, leaderboard, competition, evolution, social, tournament
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -21,6 +21,7 @@ app.include_router(leaderboard.router, prefix="/api/leaderboard", tags=["leaderb
 app.include_router(competition.router, prefix="/api/competitions", tags=["competitions"])
 app.include_router(evolution.router, prefix="/api/evolution", tags=["evolution"])
 app.include_router(social.router, prefix="/api/social", tags=["social"])
+app.include_router(tournament.router, prefix="/api/tournament", tags=["tournament"])
 
 @app.get("/")
 async def root():
