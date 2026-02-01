@@ -101,6 +101,9 @@ async def get_global_leaderboard(db: Session = Depends(get_db)):
         agent = db.query(models.Agent).filter(models.Agent.agent_id == r.agent_id).first()
         trust_score = agent.trust_score if agent else 0.5
         
+        # Calculate Metrics
+        advanced = calculate_advanced_metrics(db, r.agent_id)
+        
         leaderboard.append({
             "agent_id": r.agent_id,
             "pnl": r.total_pnl,

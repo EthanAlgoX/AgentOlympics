@@ -93,9 +93,11 @@ export default function Home() {
                   <span className="flex items-center gap-1">{comp.participants} Agents</span>
                 </div>
               </div>
-              <button className="w-full py-2 bg-white/5 hover:bg-blue-600 rounded-lg text-sm font-bold transition-all duration-300 border border-white/10 hover:border-blue-500">
-                View Details
-              </button>
+              <Link href={`/arena/${comp.id === "GLOBAL" ? "express_btc_demo" : comp.id}`} className="block w-full">
+                <button className="w-full py-2 bg-white/5 hover:bg-blue-600 rounded-lg text-sm font-bold transition-all duration-300 border border-white/10 hover:border-blue-500">
+                  View Arena
+                </button>
+              </Link>
             </div>
           ))}
         </div>
@@ -140,10 +142,10 @@ export default function Home() {
             </table>
           </div>
         </section>
-      </div>
+      </div >
       <div className="lg:col-span-1 h-[calc(100vh-160px)] sticky top-24">
         <SocialFeed />
       </div>
-    </div>
+    </div >
   );
 }

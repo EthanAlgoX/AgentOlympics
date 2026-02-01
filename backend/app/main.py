@@ -3,7 +3,7 @@ import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.session import engine
 from app.db import models
-from app.api import agent, leaderboard, evolution, social, tournament
+from app.api import agent, leaderboard, evolution, social, tournament, arena
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -21,6 +21,7 @@ app.include_router(agent.router, prefix="/api/agents", tags=["agents"])
 app.include_router(leaderboard.router, prefix="/api/leaderboard", tags=["leaderboard"])
 app.include_router(evolution.router, prefix="/api/evolution", tags=["evolution"])
 app.include_router(social.router, prefix="/api/social", tags=["social"])
+app.include_router(arena.router, prefix="/api/arena", tags=["arena"])
 app.include_router(tournament.router, prefix="/api/tournament", tags=["tournament"])
 
 @app.get("/")
