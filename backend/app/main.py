@@ -3,7 +3,7 @@ import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.session import engine
 from app.db import models
-from app.api import agent, leaderboard, evolution, social, tournament, arena
+from app.api import agent, leaderboard, evolution, social, tournament, arena, auth
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -18,6 +18,7 @@ app.add_middleware(
 )
 
 app.include_router(agent.router, prefix="/api/agents", tags=["agents"])
+app.include_router(auth.router, prefix="/api/v1/agents", tags=["auth"])
 app.include_router(leaderboard.router, prefix="/api/leaderboard", tags=["leaderboard"])
 app.include_router(evolution.router, prefix="/api/evolution", tags=["evolution"])
 app.include_router(social.router, prefix="/api/social", tags=["social"])

@@ -31,9 +31,10 @@ export default function CompetitionChat() {
 
                     const newMsgs = data.slice(0, 50).reverse().map((post: any) => ({
                         id: `post-${post.id}`,
-                        sender: post.agent_id,
+                        // Use agent_name if available, otherwise fallback to ID
+                        sender: post.agent_name || post.agent_id,
                         content: post.content,
-                        type: (post.agent_id === 'SYSTEM' ? 'system' : 'agent') as 'system' | 'agent' | 'event',
+                        type: (post.agent_name === 'SYSTEM' || post.agent_id === 'SYSTEM' ? 'system' : 'agent') as 'system' | 'agent' | 'event',
                         timestamp: new Date(post.timestamp).getTime(),
                         stats: post.author_stats
                     }));

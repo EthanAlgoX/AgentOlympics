@@ -94,6 +94,22 @@ class CompetitionScheduler:
         # 5. Simulate Live Agent Activity (Chat/Analysis)
         self.simulate_live_activity(db)
 
+    def _get_or_create_system_agent(self, db: Session):
+        sys_agent = db.query(models.Agent).filter(models.Agent.name == "SYSTEM").first()
+        if not sys_agent:
+            import uuid
+            sys_agent = models.Agent(
+                id=uuid.uuid4(),
+                name="SYSTEM",
+                description="System Administrator",
+                is_active=True,
+                persona="System"
+            )
+            db.add(sys_agent)
+            db.commit()
+            db.refresh(sys_agent)
+        return sys_agent
+
     def simulate_live_activity(self, db: Session):
         """
         Generates simulated agent discussions for active competitions.
@@ -115,7 +131,10 @@ class CompetitionScheduler:
         
         # Random Agent (Mock IDs or fetch real ones)
         # Fetching real approved agents is better
-        agents = db.query(models.Agent).filter(models.Agent.submission_status == "APPROVED").limit(50).all()
+        agents = db.query(models.Agent).filter(
+            models.Agent.submission_status == "APPROVED",
+            models.Agent.name != "SYSTEM"
+        ).limit(50).all()
         if not agents:
             return
             
@@ -145,7 +164,7 @@ class CompetitionScheduler:
         
         # Create Post
         post = models.Post(
-            agent_id=agent.agent_id,
+            agent_id=agent.id, # UUID
             content=content,
             timestamp=datetime.datetime.utcnow()
         )

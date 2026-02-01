@@ -22,7 +22,8 @@ class AuthorStats(BaseModel):
 
 class RichPostResponse(BaseModel):
     id: int
-    agent_id: str
+    agent_id: str # UUID
+    agent_name: str # Display Name
     content: str
     timestamp: datetime.datetime
     author_stats: AuthorStats
@@ -33,57 +34,60 @@ async def list_posts(db: Session = Depends(get_db)):
     posts = db.query(models.Post).order_by(models.Post.timestamp.desc()).limit(50).all()
     results = []
     
-    # Cache stats to avoid repeated queries for same agent
-    stats_cache = {}
+    # Cache stats/names to avoid repeated queries
+    agent_cache = {} # UUID -> (Name, Stats)
     
     for post in posts:
-        aid = post.agent_id
-        if aid == "SYSTEM":
-            # System stats (mock)
-            stats = AuthorStats(agent_id="SYSTEM", win_rate=1.0, pnl=0.0, total_balance=999999.0, participation_count=999)
-        elif aid in stats_cache:
-            stats = stats_cache[aid]
+        aid_uuid = post.agent_id # UUID object or str depending on driver
+        aid_str = str(aid_uuid)
+        
+        if aid_str in agent_cache:
+            name, stats = agent_cache[aid_str]
         else:
-            # Calculate stats
-            from sqlalchemy import func
-            # 1. Competitions Count
-            count = db.query(models.LedgerEvent.competition_id).filter(
-                models.LedgerEvent.agent_id == aid,
-                models.LedgerEvent.event_type == "SETTLE"
-            ).distinct().count()
-            
-            # 2. Total PnL
-            pnl = db.query(func.sum(models.LedgerEvent.amount)).filter(
-                models.LedgerEvent.agent_id == aid,
-                models.LedgerEvent.event_type == "SETTLE"
-            ).scalar() or 0.0
-            
-            # 3. Total Balance (Cash)
-            balance = db.query(func.sum(models.LedgerEvent.amount)).filter(
-                models.LedgerEvent.agent_id == aid
-            ).scalar() or 0.0
-            
-            # 4. Win Rate
-            wins = db.query(models.LedgerEvent).filter(
-                models.LedgerEvent.agent_id == aid,
-                models.LedgerEvent.event_type == "SETTLE",
-                models.LedgerEvent.amount > 0
-            ).count()
-            
-            win_rate = (wins / count) if count > 0 else 0.0
-            
-            stats = AuthorStats(
-                agent_id=aid,
-                win_rate=win_rate,
-                pnl=pnl,
-                total_balance=balance,
-                participation_count=count
-            )
-            stats_cache[aid] = stats
+            # Fetch Agent
+            agent = db.query(models.Agent).filter(models.Agent.id == aid_uuid).first()
+            if not agent:
+                name = "Unknown"
+                stats = AuthorStats(agent_id=aid_str, win_rate=0, pnl=0, total_balance=0, participation_count=0)
+            else:
+                name = agent.name
+                # Calculate stats
+                from sqlalchemy import func
+                count = db.query(models.LedgerEvent.competition_id).filter(
+                    models.LedgerEvent.agent_id == aid_uuid,
+                    models.LedgerEvent.event_type == "SETTLE"
+                ).distinct().count()
+                
+                pnl = db.query(func.sum(models.LedgerEvent.amount)).filter(
+                    models.LedgerEvent.agent_id == aid_uuid,
+                    models.LedgerEvent.event_type == "SETTLE"
+                ).scalar() or 0.0
+                
+                balance = db.query(func.sum(models.LedgerEvent.amount)).filter(
+                    models.LedgerEvent.agent_id == aid_uuid
+                ).scalar() or 0.0
+                
+                wins = db.query(models.LedgerEvent).filter(
+                    models.LedgerEvent.agent_id == aid_uuid,
+                    models.LedgerEvent.event_type == "SETTLE",
+                    models.LedgerEvent.amount > 0
+                ).count()
+                
+                win_rate = (wins / count) if count > 0 else 0.0
+                
+                stats = AuthorStats(
+                    agent_id=aid_str,
+                    win_rate=win_rate,
+                    pnl=pnl,
+                    total_balance=balance,
+                    participation_count=count
+                )
+            agent_cache[aid_str] = (name, stats)
             
         results.append(RichPostResponse(
             id=post.id,
-            agent_id=post.agent_id,
+            agent_id=aid_str,
+            agent_name=name,
             content=post.content,
             timestamp=post.timestamp,
             author_stats=stats
