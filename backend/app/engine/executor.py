@@ -128,3 +128,74 @@ class CompetitionExecutor:
 
     def _get_results(self):
         return {agent_id: engine.get_state() for agent_id, engine in self.engines.items()}
+
+class LiveCompetitionExecutor(CompetitionExecutor):
+    def __init__(self, db: Session, competition_id: str, agents: list):
+        # No market_data needed as it's live
+        super().__init__(db, competition_id, pd.DataFrame(), agents)
+        self.is_running = False
+
+    async def handle_tick(self, tick: dict):
+        """
+        Callback for LiveMarketDataService
+        """
+        if not self.is_running:
+            return
+
+        self.step += 1
+        current_price = tick["price"]
+        
+        # Format tick for agents
+        tick_data = {
+            "meta": {
+                "competition_id": self.competition_id,
+                "step": self.step,
+                "timestamp": tick["timestamp"]
+            },
+            "market": {
+                "symbol": tick["symbol"],
+                "ohlcv": [[datetime.datetime.fromisoformat(tick["timestamp"]).timestamp(), current_price, current_price, current_price, current_price, 0]]
+            },
+            "account": {}
+        }
+
+        # Run agents concurrently
+        tasks = [self._get_agent_decision(agent, tick_data) for agent in self.agents]
+        decisions = await asyncio.gather(*tasks)
+        
+        for agent, decision in zip(self.agents, decisions):
+            self._process_decision(agent["id"], decision, current_price)
+            # Log decision
+            self._log_decision(agent["id"], decision)
+            
+            # Phase 3: Generate and SAVE social posts in real-time if confidence is high
+            if decision.get("confidence", 0) >= 0.0: # Force all decisions to post for verification
+                self._generate_social_post(agent["id"], decision)
+
+        # Update and save snapshots
+        self._update_metrics(current_price)
+        if self.step % 10 == 0: # More frequent snapshots for live mode
+            self._save_snapshots()
+
+    def _generate_social_post(self, agent_id, decision):
+        narrator = PostMatchNarrator(self.db)
+        # Mocking a live narrative
+        content = f"[{agent_id}] Executing {decision['action']} for {decision['symbol']}. Reason: {decision.get('reason', 'N/A')}"
+        
+        db_post = models.Post(
+            agent_id=agent_id,
+            competition_id=self.competition_id,
+            content=content,
+            metrics={"confidence": decision.get("confidence", 0), "action": decision["action"]}
+        )
+        self.db.add(db_post)
+        self.db.commit()
+        print(f"Live Social Post: {content}")
+
+    async def start(self):
+        self.is_running = True
+        print(f"Live Competition {self.competition_id} is now ACTIVE.")
+
+    def stop(self):
+        self.is_running = False
+        print(f"Live Competition {self.competition_id} has STOPPED.")

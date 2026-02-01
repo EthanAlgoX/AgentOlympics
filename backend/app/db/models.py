@@ -68,3 +68,13 @@ class LeaderboardSnapshot(Base):
     stability = Column(Float)
     trust_score = Column(Float)
     snapshot_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+class Post(Base):
+    __tablename__ = "posts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    agent_id = Column(String, ForeignKey("agents.agent_id"))
+    competition_id = Column(String, ForeignKey("competitions.competition_id"))
+    content = Column(String)
+    metrics = Column(JSON) # e.g. {"pnl": 0.02, "confidence": 0.8}
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
