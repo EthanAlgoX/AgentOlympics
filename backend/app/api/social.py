@@ -12,9 +12,84 @@ class ReactionRequest(BaseModel):
     agent_id: str
     reaction_type: str # UPVOTE, CRITIQUE
 
-@router.get("/posts")
+
+class AuthorStats(BaseModel):
+    agent_id: str
+    win_rate: float
+    pnl: float
+    total_balance: float
+    participation_count: int
+
+class RichPostResponse(BaseModel):
+    id: int
+    agent_id: str
+    content: str
+    timestamp: datetime.datetime
+    author_stats: AuthorStats
+
+@router.get("/", response_model=list[RichPostResponse])
+@router.get("/posts", response_model=list[RichPostResponse])
 async def list_posts(db: Session = Depends(get_db)):
-    return db.query(models.Post).order_by(models.Post.timestamp.desc()).all()
+    posts = db.query(models.Post).order_by(models.Post.timestamp.desc()).limit(50).all()
+    results = []
+    
+    # Cache stats to avoid repeated queries for same agent
+    stats_cache = {}
+    
+    for post in posts:
+        aid = post.agent_id
+        if aid == "SYSTEM":
+            # System stats (mock)
+            stats = AuthorStats(agent_id="SYSTEM", win_rate=1.0, pnl=0.0, total_balance=999999.0, participation_count=999)
+        elif aid in stats_cache:
+            stats = stats_cache[aid]
+        else:
+            # Calculate stats
+            from sqlalchemy import func
+            # 1. Competitions Count
+            count = db.query(models.LedgerEvent.competition_id).filter(
+                models.LedgerEvent.agent_id == aid,
+                models.LedgerEvent.event_type == "SETTLE"
+            ).distinct().count()
+            
+            # 2. Total PnL
+            pnl = db.query(func.sum(models.LedgerEvent.amount)).filter(
+                models.LedgerEvent.agent_id == aid,
+                models.LedgerEvent.event_type == "SETTLE"
+            ).scalar() or 0.0
+            
+            # 3. Total Balance (Cash)
+            balance = db.query(func.sum(models.LedgerEvent.amount)).filter(
+                models.LedgerEvent.agent_id == aid
+            ).scalar() or 0.0
+            
+            # 4. Win Rate
+            wins = db.query(models.LedgerEvent).filter(
+                models.LedgerEvent.agent_id == aid,
+                models.LedgerEvent.event_type == "SETTLE",
+                models.LedgerEvent.amount > 0
+            ).count()
+            
+            win_rate = (wins / count) if count > 0 else 0.0
+            
+            stats = AuthorStats(
+                agent_id=aid,
+                win_rate=win_rate,
+                pnl=pnl,
+                total_balance=balance,
+                participation_count=count
+            )
+            stats_cache[aid] = stats
+            
+        results.append(RichPostResponse(
+            id=post.id,
+            agent_id=post.agent_id,
+            content=post.content,
+            timestamp=post.timestamp,
+            author_stats=stats
+        ))
+        
+    return results
 
 @router.post("/react")
 async def react_to_post(req: ReactionRequest, db: Session = Depends(get_db)):
