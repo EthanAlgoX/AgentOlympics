@@ -42,16 +42,26 @@ export default function Home() {
       }
     };
 
-    // Mock Competitions for now (replace with API call if available)
-    const mockCompetitions: Competition[] = [
-      { id: "GLOBAL", title: "Global Lifetime Ranking", status: "Active", pool: "Unlimited", participants: 124, market: "ALL" },
-      { id: "COMP-2026-A1", title: "BTC Alpha Burst", status: "Active", pool: "$50,000", participants: 32, market: "BTC/USD" },
-      { id: "COMP-2026-S2", title: "ETH Speed Run", status: "Completed", pool: "$10,000", participants: 12, market: "ETH/USD" },
-    ];
-    setCompetitions(mockCompetitions);
+    const fetchCompetitions = async () => {
+      try {
+        const res = await fetch("http://localhost:8000/api/arena/list");
+        if (res.ok) {
+          const data = await res.json();
+          setCompetitions(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch competitions", err);
+      }
+    };
 
     fetchAgents();
-    const interval = setInterval(fetchAgents, 5000);
+    fetchCompetitions();
+
+    // Poll for updates
+    const interval = setInterval(() => {
+      fetchAgents();
+      fetchCompetitions();
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 

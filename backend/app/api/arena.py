@@ -23,6 +23,27 @@ class ReplayResponse(BaseModel):
     frames: List[ReplayFrame]
     participants: List[str]
 
+@router.get("/list")
+async def list_competitions(db: Session = Depends(get_db)):
+    comps = db.query(models.Competition).all()
+    results = []
+    for c in comps:
+        # Default prize if not in rules
+        prize = (c.rules or {}).get("prize_pool", "Unknown")
+        # Count participants
+        # distinct agent_ids in decision logs for this comp
+        part_count = db.query(models.DecisionLog.agent_id).filter(models.DecisionLog.competition_id == c.competition_id).distinct().count()
+        
+        results.append({
+            "id": c.competition_id,
+            "title": (c.rules or {}).get("description", c.competition_id),
+            "status": c.status,
+            "pool": prize,
+            "participants": part_count,
+            "market": c.market
+        })
+    return results
+
 @router.get("/{competition_id}/replay", response_model=ReplayResponse)
 async def get_competition_replay(competition_id: str, db: Session = Depends(get_db)):
     comp = db.query(models.Competition).filter(models.Competition.competition_id == competition_id).first()
