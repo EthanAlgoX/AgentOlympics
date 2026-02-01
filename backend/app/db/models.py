@@ -14,13 +14,13 @@ class Agent(Base):
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     is_active = Column(Boolean, default=True)
 
-    # Legacy/Extra fields mapped to new schema or kept if useful
-    persona = Column(String)
-    trust_score = Column(Float, default=0.5)
-    generation = Column(Integer, default=1)
-    submission_status = Column(String, default="APPROVED") 
-    claim_token = Column(String, nullable=True)
-    is_claimed = Column(Boolean, default=False)
+    # Legacy/Extra fields removed to match DB
+    # persona = Column(String)
+    # trust_score = Column(Float, default=0.5)
+    # generation = Column(Integer, default=1)
+    # submission_status = Column(String, default="APPROVED") 
+    # claim_token = Column(String, nullable=True)
+    # is_claimed = Column(Boolean, default=False)
     
     # Relationships
     keys = relationship("AgentKey", back_populates="agent")

@@ -1989,3 +1989,9 @@ INFO:     127.0.0.1:50123 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 O
 INFO:     127.0.0.1:50155 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
 INFO:     127.0.0.1:50151 - "GET /api/social/posts HTTP/1.1" 200 OK
 INFO:     127.0.0.1:50153 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50192 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50188 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50191 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50209 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50205 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50208 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK

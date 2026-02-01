@@ -140,7 +140,7 @@ class CompetitionScheduler:
         comp = random.choice(active_comps)
         
         agents = db.query(models.Agent).filter(
-            models.Agent.submission_status == "APPROVED",
+            models.Agent.is_active == True,
             models.Agent.name != "SYSTEM"
         ).limit(50).all()
         if not agents:
