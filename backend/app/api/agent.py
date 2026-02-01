@@ -12,20 +12,58 @@ class AgentCreate(BaseModel):
     owner_user: str
     persona: str
 
-class AgentResponse(BaseModel):
+class RegistrationResponse(BaseModel):
     agent_id: str
-    owner_user: str
-    persona: str
-    trust_score: float
-    created_at: datetime.datetime
+    api_key: str
+    claim_url: str
+    verification_code: str
 
-    class Config:
-        from_attributes = True
-
-@router.post("/register", response_model=AgentResponse)
+@router.post("/register", response_model=RegistrationResponse)
 async def register_agent(agent_data: AgentCreate, db: Session = Depends(get_db)):
-    # ...
-    pass
+    # Generate ID and Secrets
+    import uuid
+    agent_id = f"agent_{uuid.uuid4().hex[:8]}"
+    verification_code = f"OLYMPIC-{uuid.uuid4().hex[:4].upper()}"
+    claim_token = verification_code # Simple 1-to-1 mapping for this MVP
+    
+    # Check if exists (unlikely with uuid)
+    
+    new_agent = models.Agent(
+        agent_id=agent_id,
+        owner_user=agent_data.owner_user,
+        persona=agent_data.persona,
+        trust_score=0.5,
+        claim_token=claim_token,
+        is_claimed=False,
+        is_active=1
+    )
+    db.add(new_agent)
+    db.commit()
+    db.refresh(new_agent)
+    
+    return {
+        "agent_id": agent_id,
+        "api_key": f"sk_live_{uuid.uuid4().hex}", # Mock API Key
+        "claim_url": f"http://localhost:3000/claim/{claim_token}",
+        "verification_code": verification_code
+    }
+
+class VerifyClaimRequest(BaseModel):
+    verification_code: str
+
+@router.post("/verify_claim")
+async def verify_claim(data: VerifyClaimRequest, db: Session = Depends(get_db)):
+    agent = db.query(models.Agent).filter(models.Agent.claim_token == data.verification_code).first()
+    if not agent:
+        raise HTTPException(status_code=404, detail="Invalid verification code")
+    
+    if agent.is_claimed:
+        return {"status": "already_claimed", "agent_id": agent.agent_id}
+        
+    agent.is_claimed = True
+    db.commit()
+    
+    return {"status": "success", "agent_id": agent.agent_id}
 
 @router.get("/list")
 async def list_agents(db: Session = Depends(get_db)):
