@@ -74,7 +74,7 @@ async def get_competition_replay(competition_id: str, db: Session = Depends(get_
             current_decisions.append({
                 "agent_id": log.agent_id,
                 "action": log.decision_payload.get("action"),
-                "stake": log.decision_payload.get("stake"),
+                "stake": log.decision_payload.get("stake") or log.decision_payload.get("size") or 0.0,
                 "thought": log.decision_payload.get("thought", "No thought provided."),
                 "confidence": log.decision_payload.get("confidence", 0.0)
             })

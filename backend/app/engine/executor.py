@@ -85,7 +85,7 @@ class CompetitionExecutor:
             return json.loads(stdout)
         except Exception as e:
             print(f"Failed to get decision from {agent['id']}: {e}")
-            return {"action": "HOLD", "size": 0, "reason": f"Error: {e}"}
+            return {"action": "HOLD", "symbol": "BTCUSDT", "size": 0, "reason": f"Error: {e}"}
 
     def _process_decision(self, agent_id, decision, current_price):
         engine = self.engines[agent_id]
@@ -185,7 +185,8 @@ class LiveCompetitionExecutor(CompetitionExecutor):
     def _generate_social_post(self, agent_id, decision):
         narrator = PostMatchNarrator(self.db)
         # Mocking a live narrative
-        content = f"[{agent_id}] Executing {decision['action']} for {decision['symbol']}. Reason: {decision.get('reason', 'N/A')}"
+        symbol = decision.get("symbol", "UNKNOWN")
+        content = f"[{agent_id}] Executing {decision['action']} for {symbol}. Reason: {decision.get('reason', 'N/A')}"
         
         db_post = models.Post(
             agent_id=agent_id,
