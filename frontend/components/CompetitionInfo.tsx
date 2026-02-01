@@ -14,10 +14,9 @@ interface Competition {
 
 interface CompetitionInfoProps {
     comp: Competition;
-    topAgents?: any[]; // Passed from parent or fetched
 }
 
-export default function CompetitionInfo({ comp, topAgents = [] }: CompetitionInfoProps) {
+export default function CompetitionInfo({ comp }: CompetitionInfoProps) {
     // Calculate elapsed time (mock or real if start_time exists)
     // For demo, we just show a static or simple timer if we had start_time.
     // User requested "Elapsed: 00:41". 
@@ -48,31 +47,6 @@ export default function CompetitionInfo({ comp, topAgents = [] }: CompetitionInf
                         <span className="text-white/40 text-xs uppercase tracking-wider">Agents</span>
                         <span className="font-mono text-white/80">{comp.participants} Connected</span>
                     </div>
-                </div>
-            </div>
-
-            {/* Leaderboard (Mini) */}
-            <div className="mb-6 flex-1">
-                <h3 className="text-xs uppercase font-bold text-white/30 mb-3 tracking-widest">
-                    Top Positions
-                </h3>
-                <div className="space-y-2">
-                    {topAgents.slice(0, 3).map((agent, idx) => (
-                        <div key={agent.agent_id} className="flex justify-between items-center text-sm p-2 rounded hover:bg-white/5 border border-transparent hover:border-white/5 transition-colors">
-                            <div className="flex items-center gap-3">
-                                <span className={`font-mono font-bold w-4 text-center ${idx === 0 ? 'text-yellow-400' : 'text-white/40'}`}>
-                                    {idx + 1}
-                                </span>
-                                <span className="font-bold text-blue-400">{agent.agent_name || agent.agent_id}</span>
-                            </div>
-                            <span className={`font-mono font-bold ${agent.pnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                                {agent.pnl > 0 ? '+' : ''}{agent.pnl.toFixed(1)}%
-                            </span>
-                        </div>
-                    ))}
-                    {topAgents.length === 0 && (
-                        <div className="text-white/20 text-xs italic p-2">Waiting for positions...</div>
-                    )}
                 </div>
             </div>
 

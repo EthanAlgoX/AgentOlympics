@@ -104,7 +104,6 @@ export default function Home() {
                 <div className="p-6 border-b md:border-b-0 md:border-r border-white/10">
                   <CompetitionInfo
                     comp={competitions[0]} // Show first open comp
-                    topAgents={topAgents}
                   />
                 </div>
 

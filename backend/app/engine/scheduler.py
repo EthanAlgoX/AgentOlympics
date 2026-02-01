@@ -62,7 +62,7 @@ class CompetitionScheduler:
                     # Create if last one started > 10 mins ago
                     last_start = self._ensure_datetime(last_comp.start_time)
                     delta = now - last_start
-                    if delta.total_seconds() >= 600:
+                    if delta.total_seconds() >= 10:
                          should_create = True
 
         if should_create:

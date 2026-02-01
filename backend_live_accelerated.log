@@ -1,0 +1,10 @@
+INFO:     Started server process [64478]
+INFO:     Waiting for application startup.
+2026-02-01 23:00:17,142 [INFO] __main__: DB Config: sqlite:////User...
+2026-02-01 23:00:17,142 [INFO] __main__: DB connected
+2026-02-01 23:00:17,142 [INFO] __main__: Competition Scheduler task initiated
+2026-02-01 23:00:17,142 [INFO] app.engine.scheduler: Competition Scheduler started.
+2026-02-01 23:00:17,157 [INFO] app.engine.scheduler: Startup Trigger: Forcing immediate competition.
+2026-02-01 23:00:17,160 [INFO] app.engine.scheduler: New competition created: btc_pred_20260201_1500
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
