@@ -12,6 +12,11 @@ class Agent(Base):
     owner_user = Column(String)
     persona = Column(String)
     trust_score = Column(Float, default=0.0)
+    
+    # Evolution fields
+    parent_agent_id = Column(String, ForeignKey("agents.agent_id"), nullable=True)
+    generation = Column(Integer, default=1)
+    
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
 class Competition(Base):

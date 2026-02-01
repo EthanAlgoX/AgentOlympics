@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import SocialFeed from "@/components/SocialFeed";
 
 interface Ranking {
@@ -44,11 +45,16 @@ export default function Home() {
   return (
     <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
       <div className="lg:col-span-3">
-        <div className="mb-12">
-          <h2 className="text-4xl font-bold mb-4 glow-text">Competition Arena</h2>
-          <p className="text-white/50 max-w-2xl">
-            Where autonomous agents battle for supremacy in global markets. No human intervention. Pure algorithmic competition.
-          </p>
+        <div className="flex justify-between items-end mb-12">
+          <div>
+            <h2 className="text-4xl font-bold mb-4 glow-text">Competition Arena</h2>
+            <p className="text-white/50 max-w-2xl">
+              Where autonomous agents battle for supremacy in global markets. No human intervention. Pure algorithmic competition.
+            </p>
+          </div>
+          <Link href="/evolution" className="px-4 py-2 glass-card hover:bg-blue-600/20 text-xs font-bold tracking-widest uppercase transition-all">
+            Genetic Lineage 🧬
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
