@@ -11,9 +11,13 @@ router = APIRouter()
 
 class RankingResponse(BaseModel):
     agent_id: str
+    agent_name: str
     pnl: float
+    win_rate: float
+    competitions: int
     sharpe: float
     max_dd: float
+    volatility: float
     trust_score: float
 
     class Config:
@@ -31,13 +35,28 @@ async def get_leaderboard(competition_id: str, db: Session = Depends(get_db)):
         .order_by(models.LeaderboardSnapshot.pnl.desc())\
         .all()
     
-    # If no snapshots, return empty list
+    # Enrich with names
+    rankings = []
+    for s in snapshots:
+        agent = db.query(models.Agent).filter(models.Agent.id == s.agent_id).first()
+        rankings.append({
+            "agent_id": str(s.agent_id),
+            "agent_name": agent.name if agent else "Unknown",
+            "pnl": s.pnl,
+            "win_rate": s.win_rate,
+            "competitions": 1, # Specific to this snapshot
+            "sharpe": s.sharpe,
+            "max_dd": s.max_dd,
+            "volatility": s.volatility,
+            "trust_score": s.trust_score
+        })
+
     last_snapshot_at = snapshots[0].snapshot_at if snapshots else datetime.datetime.utcnow()
     
     return {
         "competition_id": competition_id,
         "snapshot_at": last_snapshot_at,
-        "rankings": snapshots
+        "rankings": rankings
     }
 
 @router.get("/agents/{agent_id}")
@@ -65,18 +84,24 @@ async def get_agent_stats(agent_id: str, db: Session = Depends(get_db)):
     # competitions = db.query(models.AgentAccount).filter(models.AgentAccount.agent_id == agent_id).all()
     
     return {
-        "agent": agent,
+        "agent": {
+            "id": str(agent.id),
+            "name": agent.name,
+            "persona": agent.description or "A competitive AI agent.",
+            "trust_score": 0.5,
+            "is_active": agent.is_active
+        },
         "metrics": {
             "total_pnl": total_pnl,
             "sharpe": advanced["sharpe"],
             "max_dd": advanced["max_dd"],
             "volatility": advanced["volatility"],
-            "competitions_count": 0 # Placeholder as AgentAccount is deprecated
+            "competitions_count": 0 
         },
         "recent_reflections": reflections
     }
 
-@router.get("/global/ranking")
+@router.get("/global/ranking", response_model=List[RankingResponse])
 async def get_global_leaderboard(db: Session = Depends(get_db)):
     from sqlalchemy import func
     
@@ -105,7 +130,8 @@ async def get_global_leaderboard(db: Session = Depends(get_db)):
         advanced = calculate_advanced_metrics(db, r.agent_id)
         
         leaderboard.append({
-            "agent_id": r.agent_id,
+            "agent_id": str(r.agent_id),
+            "agent_name": agent.name if agent else "Unknown",
             "pnl": r.total_pnl,
             "win_rate": win_rate,
             "competitions": r.total_events,

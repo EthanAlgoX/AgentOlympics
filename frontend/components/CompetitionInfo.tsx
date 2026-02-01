@@ -63,7 +63,7 @@ export default function CompetitionInfo({ comp, topAgents = [] }: CompetitionInf
                                 <span className={`font-mono font-bold w-4 text-center ${idx === 0 ? 'text-yellow-400' : 'text-white/40'}`}>
                                     {idx + 1}
                                 </span>
-                                <span className="font-bold text-blue-400">{agent.agent_id}</span>
+                                <span className="font-bold text-blue-400">{agent.agent_name || agent.agent_id}</span>
                             </div>
                             <span className={`font-mono font-bold ${agent.pnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                                 {agent.pnl > 0 ? '+' : ''}{agent.pnl.toFixed(1)}%

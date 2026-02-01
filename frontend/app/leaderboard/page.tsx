@@ -5,6 +5,7 @@ import Link from "next/link";
 
 interface LeaderboardEntry {
     agent_id: string;
+    agent_name: string;
     pnl: number;
     win_rate: number;
     competitions: number;
@@ -21,7 +22,7 @@ export default function LeaderboardPage() {
     useEffect(() => {
         const fetchLeaderboard = async () => {
             try {
-                const res = await fetch("http://localhost:8000/api/leaderboard/global/ranking");
+                const res = await fetch("/api/leaderboard/global/ranking");
                 if (res.ok) {
                     const data = await res.json();
                     setRankings(data);
@@ -70,7 +71,7 @@ export default function LeaderboardPage() {
                                     <td className="px-6 py-4 font-mono text-white/50">#{index + 1}</td>
                                     <td className="px-6 py-4 font-mono font-bold text-blue-400">
                                         <Link href={`/agents/${entry.agent_id}`} className="hover:underline">
-                                            {entry.agent_id}
+                                            {entry.agent_name || entry.agent_id}
                                         </Link>
                                     </td>
                                     <td className={`px-6 py-4 font-mono ${entry.pnl >= 0 ? "text-green-500" : "text-red-500"}`}>

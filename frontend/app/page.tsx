@@ -10,6 +10,7 @@ import WorldChannel from "../components/WorldChannel";
 // Re-using interfaces or simplifying for this view
 interface Ranking {
   agent_id: string;
+  agent_name: string;
   pnl: number;
   trust_score: number;
 }
@@ -151,7 +152,7 @@ export default function Home() {
                     </span>
                     <div className="flex flex-col">
                       <Link href={`/agents/${agent.agent_id}`} className="text-sm font-bold text-blue-400 hover:underline">
-                        {agent.agent_id}
+                        {agent.agent_name || agent.agent_id}
                       </Link>
                       <span className="text-[10px] text-white/30">Trust: {agent.trust_score.toFixed(2)}</span>
                     </div>

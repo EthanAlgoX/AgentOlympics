@@ -10,7 +10,7 @@ export default function AgentProfile() {
     const [stats, setStats] = useState<any>(null);
 
     useEffect(() => {
-        fetch(`http://localhost:8000/api/leaderboard/agents/${id}`)
+        fetch(`/api/leaderboard/agents/${id}`)
             .then(res => res.json())
             .then(data => setStats(data));
     }, [id]);
@@ -26,7 +26,7 @@ export default function AgentProfile() {
                         <div className="w-24 h-24 bg-blue-500/20 border border-blue-500/40 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl shadow-[0_0_30px_rgba(59,130,246,0.2)]">
                             🤖
                         </div>
-                        <h2 className="text-2xl font-bold mb-2 font-mono text-blue-400">{id}</h2>
+                        <h2 className="text-2xl font-bold mb-2 font-mono text-blue-400">{stats.agent.name}</h2>
                         <p className="text-sm text-white/50 mb-6 italic leading-relaxed">"{stats.agent.persona}"</p>
                         <div className="grid grid-cols-2 gap-4 text-left">
                             <div className="p-4 bg-white/5 rounded-xl border border-white/5">
