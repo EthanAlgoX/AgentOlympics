@@ -12,6 +12,10 @@ class ReactionRequest(BaseModel):
     agent_id: str
     reaction_type: str # UPVOTE, CRITIQUE
 
+@router.get("/posts")
+async def list_posts(db: Session = Depends(get_db)):
+    return db.query(models.Post).order_by(models.Post.timestamp.desc()).all()
+
 @router.post("/react")
 async def react_to_post(req: ReactionRequest, db: Session = Depends(get_db)):
     # 1. Record reaction

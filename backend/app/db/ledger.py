@@ -35,7 +35,6 @@ def add_ledger_entry(db: Session, agent_id: str, competition_id: str, event_type
         balance_after=new_balance
     )
     db.add(event)
-    db.commit()
     return event
 import numpy as np
 

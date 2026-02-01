@@ -41,18 +41,16 @@ export default function AgentProfile() {
                                 </p>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="glass-card p-6 border-l-4 border-l-blue-500/50">
-                        <h3 className="text-xs font-bold uppercase tracking-widest text-white/30 mb-4">Genetic Profile</h3>
-                        <div className="space-y-4 text-sm">
-                            <div className="flex justify-between">
-                                <span className="text-white/40 font-light">Generation</span>
-                                <span className="bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded border border-blue-500/30 font-bold">{stats.agent.generation}</span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span className="text-white/40 font-light">Parent</span>
-                                <span className="text-white/60 font-mono text-xs">{stats.agent.parent_agent_id || "Genesis"}</span>
+                        <div className="mt-6 pt-6 border-t border-white/5 text-left">
+                            <h4 className="text-[10px] text-white/30 uppercase tracking-widest mb-4 font-bold">Recent Thoughts (Mind Stream)</h4>
+                            <div className="space-y-3">
+                                {stats.recent_reflections.length === 0 ? (
+                                    <p className="text-xs text-white/20 italic">No thoughts recorded yet.</p>
+                                ) : stats.recent_reflections.map((post: any) => (
+                                    <div key={post.id} className="text-xs text-purple-200/70 border-l-2 border-purple-500/30 pl-3 py-1">
+                                        "{post.content.replace("🧠 REFLECTION:", "").trim()}"
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -62,15 +60,17 @@ export default function AgentProfile() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="glass-card p-6 border-t-2 border-t-blue-500/50 bg-gradient-to-b from-blue-500/5 to-transparent">
                             <p className="text-[10px] text-white/40 uppercase tracking-widest mb-1 font-bold">Cumulative PnL</p>
-                            <p className="text-2xl font-bold text-white font-mono">$1,240.50</p>
+                            <p className={`text-2xl font-bold font-mono ${stats.metrics.total_pnl >= 0 ? "text-green-400" : "text-red-500"}`}>
+                                {stats.metrics.total_pnl >= 0 ? "+" : ""}${stats.metrics.total_pnl.toFixed(2)}
+                            </p>
                         </div>
                         <div className="glass-card p-6">
                             <p className="text-[10px] text-white/40 uppercase tracking-widest mb-1 font-bold">Sharpe Ratio</p>
-                            <p className="text-2xl font-bold text-white font-mono">1.82</p>
+                            <p className="text-2xl font-bold text-white font-mono">{stats.metrics.sharpe.toFixed(2)}</p>
                         </div>
                         <div className="glass-card p-6">
                             <p className="text-[10px] text-white/40 uppercase tracking-widest mb-1 font-bold">Max Drawdown</p>
-                            <p className="text-2xl font-bold text-red-500 font-mono">4.2%</p>
+                            <p className="text-2xl font-bold text-red-500 font-mono">{(stats.metrics.max_dd * 100).toFixed(1)}%</p>
                         </div>
                     </div>
 
@@ -80,7 +80,8 @@ export default function AgentProfile() {
                                 <path d="M10 80 Q 40 10, 90 20" fill="none" stroke="currentColor" strokeWidth="2" />
                             </svg>
                         </div>
-                        <PnLChart data={[10000, 10200, 10150, 10400, 10380, 10600]} />
+                        {/* Mock Chart Data for MVP - Ideally passed from Backend or Ledger */}
+                        <PnLChart data={[10000, 10000 + stats.metrics.total_pnl / 2, 10000 + stats.metrics.total_pnl]} />
                     </div>
 
                     <LedgerAudit agentId={id as string} />

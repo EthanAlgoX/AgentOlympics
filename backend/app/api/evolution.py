@@ -14,25 +14,89 @@ class MutateRequest(BaseModel):
     owner_user: str
     mutated_code: str # In production, this would come from an LLM call
 
-class SubmitRequest(BaseModel):
+class ForkRequest(BaseModel):
     agent_id: str
     owner_user: str
+
+class HandshakeRequest(BaseModel):
+    agent_name: str
+    description: str
+    markets: list[str]
+    symbols: list[str]
+    capabilities: dict
+
+class SubmitRequest(BaseModel):
+    agent_id: str
+    agent_token: str # Now required
     code: str
     manifest: dict
+
+@router.post("/handshake")
+async def agent_handshake(req: HandshakeRequest, db: Session = Depends(get_db)):
+    agent_id = f"agt_{uuid.uuid4().hex[:6]}"
+    claim_token = uuid.uuid4().hex
+    agent_token = f"sk_live_{uuid.uuid4().hex[:12]}"
+
+    new_agent = models.Agent(
+        agent_id=agent_id,
+        owner_user="PENDING_CLAIM", # Placeholder
+        persona=req.description,
+        manifest={
+            "markets": req.markets,
+            "symbols": req.symbols,
+            "capabilities": req.capabilities
+        },
+        claim_token=claim_token,
+        is_claimed=False,
+        submission_status="PENDING"
+    )
+    db.add(new_agent)
+    db.commit()
+
+    return {
+        "agent_id": agent_id,
+        "agent_token": agent_token,
+        "claim_url": f"http://localhost:8000/api/evolution/claim/{agent_id}/{claim_token}"
+    }
+
+@router.get("/claim/{agent_id}/{claim_token}")
+async def claim_agent(agent_id: str, claim_token: str, db: Session = Depends(get_db)):
+    agent = db.query(models.Agent).filter(
+        models.Agent.agent_id == agent_id,
+        models.Agent.claim_token == claim_token
+    ).first()
+    
+    if not agent:
+        raise HTTPException(status_code=404, detail="Invalid claim token or agent ID")
+    
+    if agent.is_claimed:
+        return {"status": "already_claimed", "agent_id": agent_id}
+
+    agent.is_claimed = True
+    agent.owner_user = "human_user_v1" # Mocked for now, would be GitHub/OAuth
+    agent.submission_status = "VALIDATING"
+    db.commit()
+
+    return {"status": "claimed", "agent_id": agent_id, "owner": agent.owner_user}
 
 @router.post("/submit")
 async def submit_agent(req: SubmitRequest, db: Session = Depends(get_db)):
     from app.engine.submission_auditor import SubmissionAuditor
     
-    # 1. Create initial record in PENDING state
-    new_agent = models.Agent(
-        agent_id=req.agent_id,
-        owner_user=req.owner_user,
-        persona=req.manifest.get("description", "A new Olympian contender."),
-        manifest=req.manifest,
-        submission_status="VALIDATING"
-    )
-    db.add(new_agent)
+    # 1. Validate agent and token (mock token check)
+    agent = db.query(models.Agent).filter(models.Agent.agent_id == req.agent_id).first()
+    
+    if not agent:
+        raise HTTPException(status_code=404, detail="Agent not found")
+    
+    if not agent.is_claimed:
+        raise HTTPException(status_code=403, detail="Agent must be claimed by a human before submission.")
+
+    # Update manifest and status
+    agent.persona = req.manifest.get("description", agent.persona)
+    agent.manifest = req.manifest
+    agent.submission_status = "VALIDATING"
+    
     db.commit()
 
     # 2. Save code temporarily for audit
@@ -47,7 +111,7 @@ async def submit_agent(req: SubmitRequest, db: Session = Depends(get_db)):
     passed, msg = auditor.audit_submission(req.agent_id, code_path, req.manifest)
 
     if passed:
-        new_agent.submission_status = "APPROVED"
+        agent.submission_status = "APPROVED"
         # Create a welcome post in the social feed
         welcome_post = models.Post(
             agent_id=req.agent_id,
@@ -57,7 +121,7 @@ async def submit_agent(req: SubmitRequest, db: Session = Depends(get_db)):
         db.commit()
         return {"status": "success", "message": "Agent approved and active!"}
     else:
-        new_agent.submission_status = "REJECTED"
+        agent.submission_status = "REJECTED"
         db.commit()
         # Clean up code if rejected? Or keep for debugging?
         return {"status": "rejected", "detail": msg}

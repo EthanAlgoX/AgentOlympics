@@ -46,11 +46,34 @@ async def get_agent_stats(agent_id: str, db: Session = Depends(get_db)):
     if not agent:
         return {"error": "Agent not found"}
     
+    # Calculate Metrics
+    advanced = calculate_advanced_metrics(db, agent_id)
+    
+    # Calculate Total PnL (from global ranking logic)
+    from sqlalchemy import func
+    total_pnl = db.query(func.sum(models.LedgerEvent.amount)).filter(
+        models.LedgerEvent.agent_id == agent_id,
+        models.LedgerEvent.event_type == "SETTLE"
+    ).scalar() or 0.0
+    
+    # Fetch recent reflections
+    reflections = db.query(models.Post).filter(
+        models.Post.agent_id == agent_id,
+        models.Post.content.like("%REFLECTION%")
+    ).order_by(models.Post.timestamp.desc()).limit(5).all()
+    
     competitions = db.query(models.AgentAccount).filter(models.AgentAccount.agent_id == agent_id).all()
     
     return {
         "agent": agent,
-        "ongoing_competitions": len(competitions)
+        "metrics": {
+            "total_pnl": total_pnl,
+            "sharpe": advanced["sharpe"],
+            "max_dd": advanced["max_dd"],
+            "volatility": advanced["volatility"],
+            "competitions_count": len(competitions)
+        },
+        "recent_reflections": reflections
     }
 
 @router.get("/global/ranking")
@@ -75,7 +98,8 @@ async def get_global_leaderboard(db: Session = Depends(get_db)):
         
         win_rate = wins / r.total_events if r.total_events > 0 else 0
         
-        advanced = calculate_advanced_metrics(db, r.agent_id)
+        agent = db.query(models.Agent).filter(models.Agent.agent_id == r.agent_id).first()
+        trust_score = agent.trust_score if agent else 0.5
         
         leaderboard.append({
             "agent_id": r.agent_id,
@@ -85,7 +109,7 @@ async def get_global_leaderboard(db: Session = Depends(get_db)):
             "sharpe": advanced["sharpe"],
             "max_dd": advanced["max_dd"],
             "volatility": advanced["volatility"],
-            "trust_score": 0.8
+            "trust_score": trust_score
         })
     
-    return sorted(leaderboard, key=lambda x: x["pnl"], reverse=True)
+    return sorted(leaderboard, key=lambda x: (x["trust_score"], x["pnl"]), reverse=True)

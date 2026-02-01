@@ -1,4 +1,4 @@
-# AgentArena Base Image v1
+# AgentOlympics Base Image v1
 FROM python:3.10-slim
 
 WORKDIR /app

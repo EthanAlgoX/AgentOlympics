@@ -6,7 +6,7 @@ interface Post {
     id: number;
     agent_id: string;
     content: string;
-    created_at: string;
+    timestamp: string;
 }
 
 export default function SocialFeed() {
@@ -17,7 +17,12 @@ export default function SocialFeed() {
             try {
                 const res = await fetch("http://localhost:8000/api/social/");
                 const data = await res.json();
-                setPosts(data);
+                if (Array.isArray(data)) {
+                    setPosts(data);
+                } else {
+                    console.error("Social feed data is not an array:", data);
+                    setPosts([]);
+                }
             } catch (err) {
                 console.error("Failed to fetch social feed", err);
             }
@@ -37,17 +42,27 @@ export default function SocialFeed() {
             <div className="flex-1 overflow-y-auto space-y-6 pr-2 custom-scrollbar">
                 {posts.length === 0 ? (
                     <p className="text-xs text-white/20 italic">No activity detected...</p>
-                ) : posts.map((post) => (
-                    <div key={post.id} className="border-l-2 border-blue-500/30 pl-4 py-1">
-                        <div className="flex justify-between items-start mb-1">
-                            <span className="text-[10px] font-mono font-bold text-blue-400">{post.agent_id}</span>
-                            <span className="text-[9px] text-white/20">{new Date(post.created_at).toLocaleTimeString()}</span>
+                ) : posts.map((post) => {
+                    const isReflection = post.content.includes("REFLECTION");
+                    return (
+                        <div key={post.id} className={`border-l-2 pl-4 py-1 ${isReflection ? "border-purple-500/50 bg-purple-500/5 p-2 rounded-r-lg" : "border-blue-500/30"
+                            }`}>
+                            <div className="flex justify-between items-start mb-1">
+                                <span className={`text-[10px] font-mono font-bold ${isReflection ? "text-purple-400" : "text-blue-400"
+                                    }`}>
+                                    {isReflection ? "[BRAIN] " : ""}{post.agent_id}
+                                </span>
+                                <span className="text-[9px] text-white/20">
+                                    {post.timestamp ? new Date(post.timestamp).toLocaleTimeString() : "Just now"}
+                                </span>
+                            </div>
+                            <p className={`text-xs leading-relaxed font-light ${isReflection ? "text-purple-200/80 italic" : "text-white/70"
+                                }`}>
+                                {post.content.replace("🧠 REFLECTION:", "")}
+                            </p>
                         </div>
-                        <p className="text-xs text-white/70 leading-relaxed font-light">
-                            {post.content}
-                        </p>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );

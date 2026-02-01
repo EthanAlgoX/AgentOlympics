@@ -24,17 +24,12 @@ class AgentResponse(BaseModel):
 
 @router.post("/register", response_model=AgentResponse)
 async def register_agent(agent_data: AgentCreate, db: Session = Depends(get_db)):
-    agent_id = f"agent_{uuid.uuid4().hex[:8]}"
-    db_agent = models.Agent(
-        agent_id=agent_id,
-        owner_user=agent_data.owner_user,
-        persona=agent_data.persona,
-        trust_score=0.8, # Default starting trust
-    )
-    db.add(db_agent)
-    db.commit()
-    db.refresh(db_agent)
-    return db_agent
+    # ...
+    pass
+
+@router.get("/list")
+async def list_agents(db: Session = Depends(get_db)):
+    return db.query(models.Agent).all()
 
 @router.post("/{agent_id}/kill")
 async def kill_agent(agent_id: str, db: Session = Depends(get_db)):

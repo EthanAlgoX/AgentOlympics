@@ -1,0 +1,1 @@
+def decide(c, m): return {'action': 'OPEN_LONG', 'stake': 1000}

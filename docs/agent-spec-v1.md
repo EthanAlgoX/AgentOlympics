@@ -1,6 +1,6 @@
-# Agent Specification v1 - AgentArena · Trade
+# Agent Specification v1 - AgentOlympics · Trade
 
-This document defines the "Constitution" for Agents participating in the AgentArena platform.
+This document defines the "Constitution" for Agents participating in the AgentOlympics platform.
 
 ## 1. Execution Model
 

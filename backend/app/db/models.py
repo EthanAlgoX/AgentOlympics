@@ -15,12 +15,16 @@ class Agent(Base):
     manifest = Column(JSON, nullable=True)
     submission_status = Column(String, default="APPROVED") # PENDING, VALIDATING, APPROVED, REJECTED
     is_active = Column(Integer, default=1) # 1 for active, 0 for killed
+    claim_token = Column(String, nullable=True)
+    is_claimed = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
 class Competition(Base):
     __tablename__ = "competitions"
 
     competition_id = Column(String, primary_key=True, index=True)
+    market = Column(String)
+    initial_price = Column(Float)
     start_time = Column(DateTime)
     end_time = Column(DateTime)
     rules = Column(JSON)
@@ -33,6 +37,7 @@ class DecisionLog(Base):
     id = Column(Integer, primary_key=True, index=True)
     agent_id = Column(String, ForeignKey("agents.agent_id"))
     competition_id = Column(String, ForeignKey("competitions.competition_id"))
+    step = Column(Integer)
     decision_payload = Column(JSON) # e.g. {"action": "OPEN_LONG", "stake": 100}
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
 

@@ -1,0 +1,145 @@
+INFO:     Started server process [15001]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:52517 - "POST /api/evolution/handshake HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52529 - "POST /api/evolution/handshake HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52531 - "GET /api/evolution/claim/agt_fd6d45/b7beab43998842319e23abb240566699 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52533 - "POST /api/evolution/submit HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52535 - "POST /api/agents/submit_decision/test_comp_1769936190/agt_fd6d45 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52537 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52547 - "POST /api/evolution/handshake HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52549 - "GET /api/evolution/claim/agt_e80ca6/f9773013f33b4d9593f930467c762178 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52551 - "POST /api/evolution/submit HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52553 - "POST /api/agents/submit_decision/test_comp_1769936214/agt_e80ca6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52555 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52571 - "POST /api/evolution/handshake HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52573 - "GET /api/evolution/claim/agt_ecbe78/626b3a213725474d97f19ea289d496dd HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52575 - "POST /api/evolution/submit HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52577 - "POST /api/agents/submit_decision/test_comp_1769936238/agt_ecbe78 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52579 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52598 - "POST /api/evolution/handshake HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52600 - "GET /api/evolution/claim/agt_b2afa5/14ca52aa053444fa91d66e4c5b3b5887 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52602 - "POST /api/evolution/submit HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52604 - "POST /api/agents/submit_decision/test_comp_1769936255/agt_b2afa5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52606 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53198 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53199 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53199 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53198 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53236 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53238 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53252 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53254 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53259 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53261 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53261 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53259 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53259 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53261 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53298 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53300 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53317 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53318 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53353 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53354 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53354 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53353 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53353 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53354 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53380 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53381 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53405 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53407 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53417 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53418 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53424 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53425 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53430 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53431 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53434 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53435 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53437 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53439 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53442 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53443 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53451 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53452 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53455 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53456 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53461 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53464 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53470 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53471 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53477 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53478 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53488 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53489 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53501 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53502 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53511 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53512 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53516 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53517 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53520 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53521 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53524 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53525 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53528 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53529 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53532 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53533 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53537 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53538 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53541 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53542 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53550 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53551 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53564 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53565 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53565 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53564 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53592 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53593 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53597 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53598 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53604 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53605 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53610 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53611 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53614 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53615 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53625 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53626 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53632 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53633 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53636 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53637 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53640 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53641 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53644 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53645 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53650 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53652 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53661 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53662 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53668 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53669 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53672 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53673 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53678 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53680 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53692 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53693 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53698 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53699 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53702 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53704 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53707 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53708 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53711 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53712 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53715 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53716 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53719 - "GET /api/social/ HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53720 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
