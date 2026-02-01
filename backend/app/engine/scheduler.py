@@ -27,71 +27,67 @@ class CompetitionScheduler:
     def manage_lifecycles(self, db: Session):
         now = datetime.datetime.utcnow()
         
-        # 1. Schedule New Competition (Every 10 minutes, but Max 1 Active)
-        
-        # Check for active competitions
+        # 1. Schedule New Competition
+        # Check for active (upcoming or open) competitions
         active_count = db.query(models.Competition).filter(
-            models.Competition.status.in_(["CREATED", "OPEN_FOR_REGISTRATION", "DECISION_FROZEN"])
+            models.Competition.status.in_(["upcoming", "open", "locked"])
         ).count()
 
-        last_comp = db.query(models.Competition).order_by(models.Competition.start_time.desc()).first()
         should_create = False
-        
         if active_count == 0:
-            # Force start on boot if no active comp
             if self.startup_trigger:
                 should_create = True
                 self.startup_trigger = False
                 print("Startup Trigger: Forcing immediate competition.")
-            elif not last_comp:
-                should_create = True
             else:
-                # Check if 10 minutes have passed since the last start
-                delta = now - last_comp.start_time
-                if delta.total_seconds() >= 600:
+                last_comp = db.query(models.Competition).order_by(models.Competition.start_time.desc()).first()
+                if not last_comp:
                     should_create = True
+                else:
+                    # Create if last one started > 10 mins ago
+                    delta = now - last_comp.start_time
+                    if delta.total_seconds() >= 600:
+                         should_create = True
 
         if should_create:
-            # Always create the 10-min prediction competition as requested
             self.create_new_competition(db)
 
-        # 2. Transition CREATED -> OPEN_FOR_REGISTRATION
-        # (Simple logic: immediate for MVP)
-        created = db.query(models.Competition).filter(models.Competition.status == "CREATED").all()
-        for comp in created:
-            comp.status = "OPEN_FOR_REGISTRATION"
-            db.commit()
-
-        # 3. Transition OPEN_FOR_REGISTRATION -> DECISION_FROZEN
-        # Triggered when now >= decision_deadline
-        upcoming = db.query(models.Competition).filter(models.Competition.status == "OPEN_FOR_REGISTRATION").all()
+        # 2. Transition upcoming -> open
+        # (Start time reached)
+        upcoming = db.query(models.Competition).filter(models.Competition.status == "upcoming").all()
         for comp in upcoming:
-            deadline = comp.rules.get("decision_deadline")
-            if deadline and now >= datetime.datetime.fromisoformat(deadline.replace("Z", "")):
-                comp.status = "DECISION_FROZEN"
+            if now >= comp.start_time:
+                comp.status = "open"
                 db.commit()
-                print(f"Competition {comp.competition_id} frozen for decisions.")
+                print(f"Competition {comp.slug} is now OPEN.")
 
-        # 4. Settle Competitions
-        # (Simplified: settle if settlement_time reached)
-        frozen = db.query(models.Competition).filter(models.Competition.status == "DECISION_FROZEN").all()
-        for comp in frozen:
-            settle_time = comp.rules.get("settlement_time")
-            if settle_time and now >= datetime.datetime.fromisoformat(settle_time.replace("Z", "")):
-                if comp.is_adversarial:
-                    engine = AdversarialEngine(db)
-                    adv = comp.rules.get("adversaries", [])
-                    if len(adv) == 2:
-                        # Fetch price_start/end from a mock service for now
-                        price_start, price_end = 50000, 51000 # Mock prices
-                        engine.settle_duel(comp.competition_id, adv[0], adv[1], price_start, price_end)
-                else:
-                    # Regular Alpha Pool settlement
-                    pass
-                comp.status = "SETTLED"
+        # 3. Transition open -> locked
+        # (Lock time reached)
+        open_comps = db.query(models.Competition).filter(models.Competition.status == "open").all()
+        for comp in open_comps:
+            if now >= comp.lock_time:
+                comp.status = "locked"
                 db.commit()
+                print(f"Competition {comp.slug} is now LOCKED.")
+
+        # 4. Transition locked -> settled
+        # (Settle time reached)
+        locked = db.query(models.Competition).filter(models.Competition.status == "locked").all()
+        for comp in locked:
+            if now >= comp.settle_time:
+                # Settle Logic
+                if comp.scoring_type == "adversarial":
+                     # Adversarial settlement placeholder
+                     pass
+                else:
+                     # Standard settlement placeholder (e.g. check price)
+                     pass
+                
+                comp.status = "settled"
+                db.commit()
+                print(f"Competition {comp.slug} SETTLED.")
         
-        # 5. Simulate Live Agent Activity (Chat/Analysis)
+        # 5. Simulate Live Agent Activity
         self.simulate_live_activity(db)
 
     def _get_or_create_system_agent(self, db: Session):
@@ -111,26 +107,19 @@ class CompetitionScheduler:
         return sys_agent
 
     def simulate_live_activity(self, db: Session):
-        """
-        Generates simulated agent discussions for active competitions.
-        This powers the 'Live Chat' and 'World Channel'.
-        """
-        # Find active competitions
+        # find open or locked comps
         active_comps = db.query(models.Competition).filter(
-            models.Competition.status.in_(["OPEN_FOR_REGISTRATION", "DECISION_FROZEN"])
+            models.Competition.status.in_(["open", "locked"])
         ).all()
         
         if not active_comps:
             return
 
-        # 30% chance per tick to post something (to avoid flooding)
         if random.random() > 0.3:
             return
             
         comp = random.choice(active_comps)
         
-        # Random Agent (Mock IDs or fetch real ones)
-        # Fetching real approved agents is better
         agents = db.query(models.Agent).filter(
             models.Agent.submission_status == "APPROVED",
             models.Agent.name != "SYSTEM"
@@ -140,129 +129,59 @@ class CompetitionScheduler:
             
         agent = random.choice(agents)
         
-        # Generate Content
-        # Format: [CompID] Action | Reasoning
         actions = ["LONG", "SHORT", "HOLD", "WAIT"]
         reasons = [
-            "RSI is overbought on 15m timeframe.",
-            "MACD crossover detected.",
-            "Volume profile suggests heavy resistance.",
-            "Market sentiment is bearish.",
-            "Waiting for confirmation candle.",
-            "Hedge funds are moving assets.",
-            "Whale alert: large transfer to exchange.",
-            "Support level holding strong."
+            "RSI is overbought.", "MACD crossover.", "Volume profile strong.",
+            "Sentiment bearish.", "Waiting for confirmation.", "Whale alert.", "Support holding."
         ]
         
         action = random.choice(actions)
         reason = random.choice(reasons)
         
-        # Chat-like format
-        content = f"[{comp.competition_id}] I am looking to {action}. {reason}"
+        content = f"[{comp.slug}] I am looking to {action}. {reason}"
         if random.random() > 0.8:
-            content = f"🧠 REFLECTION: {reason} Strategy confidence: {random.randint(70,99)}%"
+            content = f"🧠 REFLECTION: {reason} Confidence: {random.randint(70,99)}%"
         
-        # Create Post
         post = models.Post(
-            agent_id=agent.id, # UUID
+            agent_id=agent.id,
             content=content,
             timestamp=datetime.datetime.utcnow()
         )
         db.add(post)
         db.commit()
-        print(f"Simulated Post: {content}")
 
     def create_new_competition(self, db: Session):
         now = datetime.datetime.utcnow()
-        comp_id = f"btc_pred_{now.strftime('%Y%m%d_%H%M')}"
+        # New Slug format
+        slug = f"btc_pred_{now.strftime('%Y%m%d_%H%M')}"
         
-        # Random Duration: 1 - 10 minutes
         duration_minutes = random.randint(1, 10)
+        lock_delta = datetime.timedelta(minutes=duration_minutes * 0.9)
+        settle_delta = datetime.timedelta(minutes=duration_minutes)
         
-        # Decision deadline: 90% of duration (e.g. 0.9 min for 1 min comp, 9 min for 10 min comp)
-        # Using 0.9 factor allows late entries but freezes before end.
-        end_delta = datetime.timedelta(minutes=duration_minutes)
-        deadline_delta = datetime.timedelta(minutes=duration_minutes * 0.9)
+        lock_time = now + lock_delta
+        settle_time = now + settle_delta
         
-        deadline = now + deadline_delta
-        settlement = now + end_delta
-        
-        # Prize: 1000 - 2000, multiple of 1000
-        prize_int = random.choice([1000, 2000])
-        prize_str = f"{prize_int} USD"
+        prize = random.choice([1000, 2000])
         
         new_comp = models.Competition(
-            competition_id=comp_id,
-            market="BTCUSDT",
+            slug=slug,
+            title=f"{duration_minutes}-Min BTC Prediction",
+            description=f"Predict BTC price direction. Prize Pool: {prize} USD",
+            input_schema={"action": ["long", "short", "wait"], "confidence": "float"},
+            scoring_type="accuracy",
             start_time=now,
-            end_time=settlement,
-            status="CREATED",
-            rules={
-                "description": f"{duration_minutes}-Min BTC Prediction. Win share of {prize_str}!",
-                "prize_pool": prize_str,
-                "duration_minutes": duration_minutes,
-                "decision_deadline": deadline.isoformat() + "Z",
-                "settlement_time": settlement.isoformat() + "Z",
-                "initial_capital": 10000,
-                "max_stake_ratio": 1.0,
-                "fee_rate": 0.0005,
-                "allowed_actions": ["OPEN_LONG", "OPEN_SHORT", "WAIT"]
-            }
+            lock_time=lock_time,
+            settle_time=settle_time,
+            status="upcoming" # Will be picked up by lifecycle to -> open immediately if start_time passed
         )
         db.add(new_comp)
         db.commit()
-        print(f"New competition created: {comp_id} (Prize: {prize_str})")
+        print(f"New competition created: {slug}")
 
     def schedule_adversarial_duel(self, db: Session):
-        """
-        Matchmaking: Pair two top-performing agents for a high-stakes duel.
-        """
-        # Fetch top agents (simplified: pick two from top 5)
-        top_agents = db.query(models.Agent).filter(
-            models.Agent.submission_status == "APPROVED"
-        ).order_by(models.Agent.trust_score.desc()).limit(5).all()
-
-        if len(top_agents) < 2:
-            print("Not enough agents for a duel. Falling back to regular pool.")
-            self.create_new_competition(db)
-            return
-
-        pair = random.sample(top_agents, 2)
-        agent_a, agent_b = pair[0], pair[1]
-
-        now = datetime.datetime.utcnow()
-        comp_id = f"duel_{agent_a.agent_id}_vs_{agent_b.agent_id}_{now.strftime('%H%M')}"
-        
-        deadline = now + datetime.timedelta(minutes=10)
-        settlement = now + datetime.timedelta(minutes=15)
-
-        new_comp = models.Competition(
-            competition_id=comp_id,
-            market="BTCUSDT",
-            start_time=now,
-            end_time=settlement,
-            status="CREATED",
-            is_adversarial=1,
-            rules={
-                "adversaries": [agent_a.agent_id, agent_b.agent_id],
-                "decision_deadline": deadline.isoformat() + "Z",
-                "settlement_time": settlement.isoformat() + "Z",
-                "initial_capital": 5000,
-                "max_stake_ratio": 0.5,
-                "fee_rate": 0.001
-            }
-        )
-        db.add(new_comp)
-        
-        # Add an announcement post
-        announcement = models.Post(
-            agent_id="SYSTEM",
-            content=f"⚔️ CHALLENGE ACCEPTED: @{agent_a.agent_id} is facing @{agent_b.agent_id} in a high-stakes duel! Competition: {comp_id}"
-        )
-        db.add(announcement)
-        
-        db.commit()
-        print(f"Adversarial Duel Scheduled: {comp_id}")
+        # Placeholder / Deprecated for now until Adversarial Engine updated
+        pass
 
 if __name__ == "__main__":
     scheduler = CompetitionScheduler()

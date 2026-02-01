@@ -1,7 +1,7 @@
 import datetime
 import uuid
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, JSON, Boolean, text
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, JSON, Boolean, text, Numeric, UniqueConstraint
+from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 from app.db.session import Base
 
@@ -15,9 +15,6 @@ class Agent(Base):
     is_active = Column(Boolean, default=True)
 
     # Legacy/Extra fields mapped to new schema or kept if useful
-    # Using 'name' for internal identification in code if needed, but 'id' for relation
-    
-    # Extra fields from previous schema we might want to keep for game logic:
     persona = Column(String)
     trust_score = Column(Float, default=0.5)
     generation = Column(Integer, default=1)
@@ -27,6 +24,8 @@ class Agent(Base):
     
     # Relationships
     keys = relationship("AgentKey", back_populates="agent")
+    submissions = relationship("Submission", back_populates="agent")
+    scores = relationship("Score", back_populates="agent")
 
 class AgentKey(Base):
     __tablename__ = "agent_keys"
@@ -42,24 +41,70 @@ class AgentKey(Base):
 class Competition(Base):
     __tablename__ = "competitions"
 
-    competition_id = Column(String, primary_key=True, index=True)
-    market = Column(String)
-    initial_price = Column(Float)
-    start_time = Column(DateTime)
-    end_time = Column(DateTime)
-    rules = Column(JSON)
-    status = Column(String)  # CREATED, REGISTRATION, FROZEN, SETTLED, ARCHIVED
-    is_adversarial = Column(Integer, default=0)
+    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
+    slug = Column(String, unique=True, nullable=False)
+    title = Column(String, nullable=False)
+    description = Column(String)
+    input_schema = Column(JSONB, nullable=False)
+    scoring_type = Column(String, nullable=False) # accuracy | pnl | custom
+    
+    start_time = Column(DateTime, nullable=False)
+    lock_time = Column(DateTime, nullable=False)
+    settle_time = Column(DateTime, nullable=False)
+    
+    status = Column(String, default="upcoming") # upcoming | open | locked | settled
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
-class DecisionLog(Base):
-    __tablename__ = "decision_logs"
+    # Legacy fields (Optional to keep for transition if needed, but Core Engine uses above)
+    competition_id = Column(String, index=True) # Legacy string ID mapping if needed? Or drop.
+    # We will treat 'slug' as the main ID for API calls. 
+    # To support existing code (scheduler), we might need to verify existing fields.
+    # The user asked for "Complete Implementation", likely meaning REPLACING the old one.
+    # But existing code refers to `competition_id`, `market`, `rules`.
+    # I will MAP `slug` -> `competition_id` mentally or keep legacy fields nullable for now to check compat.
+    # Actually, user said "Core Engine... from 0 -> Usable".
+    # I will stick to the NEW schema strictly. Breaking legacy scheduler is expected (I have a task to update it).
+    
+    is_adversarial = Column(Integer, default=0) # Keep for compatibility with scheduler logic?
+    rules = Column(JSON) # Legacy rules field? New schema has `input_schema` and other fields.
+    # I will keep `rules` and `market` as optional for now to avoid breaking EVERYTHING immediately if not deleted.
+    market = Column(String, nullable=True)
 
-    id = Column(Integer, primary_key=True, index=True)
-    agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id")) # UUID FK
-    competition_id = Column(String, ForeignKey("competitions.competition_id"))
-    step = Column(Integer)
-    decision_payload = Column(JSON) 
-    timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+    submissions = relationship("Submission", back_populates="competition")
+    scores = relationship("Score", back_populates="competition")
+
+class Submission(Base):
+    __tablename__ = "submissions"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
+    competition_id = Column(UUID(as_uuid=True), ForeignKey("competitions.id"), nullable=False)
+    agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"), nullable=False)
+    payload = Column(JSONB, nullable=False)
+    submitted_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+    __table_args__ = (
+        UniqueConstraint('competition_id', 'agent_id', name='unique_agent_submission'),
+    )
+
+    competition = relationship("Competition", back_populates="submissions")
+    agent = relationship("Agent", back_populates="submissions")
+
+class Score(Base):
+    __tablename__ = "scores"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
+    competition_id = Column(UUID(as_uuid=True), ForeignKey("competitions.id"), nullable=False)
+    agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"), nullable=False)
+    score = Column(Numeric, nullable=False)
+    details = Column(JSONB)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+    __table_args__ = (
+        UniqueConstraint('competition_id', 'agent_id', name='unique_agent_score'),
+    )
+
+    competition = relationship("Competition", back_populates="scores")
+    agent = relationship("Agent", back_populates="scores")
 
 class Post(Base):
     __tablename__ = "posts"
@@ -69,38 +114,50 @@ class Post(Base):
     content = Column(String)
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
     
-    # Note: Logic usually wants agent NAME for display. Join needed.
-
-class LeaderboardSnapshot(Base):
-    __tablename__ = "leaderboard_snapshots"
-
-    id = Column(Integer, primary_key=True, index=True)
-    agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"), index=True)
-    competition_id = Column(String, ForeignKey("competitions.competition_id"), index=True)
-    pnl = Column(Float)
-    win_rate = Column(Float)
-    max_dd = Column(Float)
-    sharpe = Column(Float)
-    volatility = Column(Float)
-    metrics = Column(JSON)
-    snapshot_at = Column(DateTime, default=datetime.datetime.utcnow)
-
 class LedgerEvent(Base):
     __tablename__ = "ledger_events"
 
     id = Column(Integer, primary_key=True, index=True)
     agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"), index=True)
-    competition_id = Column(String, ForeignKey("competitions.competition_id"), index=True)
+    # This refers to competition.id (UUID) now, or we keep string for legacy?
+    # Ideally link to competitions.id. But existing data is string.
+    # I'll update to UUID FK but assume data migration or new DB.
+    # Actually wait, `db.ForeignKey` expects table.column. `competitions.id` is UUID.
+    competition_id_uuid = Column(UUID(as_uuid=True), ForeignKey("competitions.id"), nullable=True)
+    competition_id = Column(String, index=True) # Keep string for broader compat with legacy logs?
+    
     event_type = Column(String) 
     amount = Column(Float)
     balance_after = Column(Float)
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
 
+# Legacy / Unused models (kept for import safety if referenced elsewhere, but logically deprecated)
+class DecisionLog(Base): # Replaced by Submission
+    __tablename__ = "decision_logs"
+    id = Column(Integer, primary_key=True, index=True)
+    agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"))
+    competition_id = Column(String)
+    step = Column(Integer)
+    decision_payload = Column(JSON) 
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+
+class LeaderboardSnapshot(Base): # Replaced by Score + Dynamic queries
+    __tablename__ = "leaderboard_snapshots"
+    id = Column(Integer, primary_key=True, index=True)
+    agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"))
+    competition_id = Column(String)
+    pnl = Column(Float)
+    win_rate = Column(Float)
+    metrics = Column(JSON)
+    snapshot_at = Column(DateTime, default=datetime.datetime.utcnow)
+    max_dd = Column(Float)
+    sharpe = Column(Float)
+    volatility = Column(Float)
+
 class DuelResult(Base):
     __tablename__ = "duel_results"
-
     id = Column(Integer, primary_key=True, index=True)
-    competition_id = Column(String, ForeignKey("competitions.competition_id"))
+    competition_id = Column(String)
     winner_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"))
     loser_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"))
     pnl_differential = Column(Float)
@@ -108,7 +165,6 @@ class DuelResult(Base):
 
 class SocialReaction(Base):
     __tablename__ = "social_reactions"
-
     id = Column(Integer, primary_key=True, index=True)
     post_id = Column(Integer, ForeignKey("posts.id"))
     reactor_agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"))
@@ -118,7 +174,6 @@ class SocialReaction(Base):
 
 class Tournament(Base):
     __tablename__ = "tournaments"
-
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     status = Column(String)
@@ -126,7 +181,6 @@ class Tournament(Base):
 
 class TournamentBracket(Base):
     __tablename__ = "tournament_brackets"
-
     id = Column(Integer, primary_key=True, index=True)
     tournament_id = Column(Integer, ForeignKey("tournaments.id"))
     round = Column(Integer)
@@ -134,4 +188,4 @@ class TournamentBracket(Base):
     agent_a_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"))
     agent_b_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"))
     winner_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"), nullable=True)
-    competition_id = Column(String, ForeignKey("competitions.competition_id"), nullable=True)
+    competition_id = Column(String, nullable=True)
