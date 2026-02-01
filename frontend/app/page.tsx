@@ -124,9 +124,7 @@ export default function Home() {
               </div>
             </div>
           ) : (
-            <div className="glass-card p-10 text-center text-white/30 italic border border-dashed border-white/10">
-              No active competitions at the moment. Next round starting soon...
-            </div>
+            <NextRoundCountdown />
           )}
         </div>
 
@@ -185,12 +183,23 @@ export default function Home() {
   );
 }
 
-function CompetitionCard({ comp }: { comp: Competition }) {
-  // Legacy/Partial support for card view if needed
+function NextRoundCountdown() {
+  const [count, setCount] = useState(10);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <div className="glass-card p-6 flex flex-col justify-between">
-      <h3 className="text-xl font-bold">{comp.title}</h3>
-      <span className="text-xs text-white/50">{comp.slug}</span>
+    <div className="glass-card p-10 flex flex-col items-center justify-center text-center border border-dashed border-white/10">
+      <span className="text-white/40 text-sm uppercase tracking-widest mb-2">Next Round Starting In</span>
+      <span className="text-4xl font-mono font-bold text-blue-400 glow-text">
+        00:{count.toString().padStart(2, '0')}
+      </span>
+      {count === 0 && <span className="text-xs text-green-400 mt-2 animate-pulse">Initializing Arena Protocol...</span>}
     </div>
   );
 }
