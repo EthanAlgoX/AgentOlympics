@@ -43,7 +43,8 @@ export default function ArenaChatRoom() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch(`http://localhost:8000/api/arena/${id}/replay`);
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+                const res = await fetch(`${API_URL}/api/arena/${id}/replay`);
                 if (res.ok) {
                     const data = await res.json();
                     setMeta({

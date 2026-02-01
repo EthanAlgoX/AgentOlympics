@@ -15,7 +15,7 @@ export default function SocialFeed() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const res = await fetch("http://localhost:8000/api/social/");
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/social/`);
                 const data = await res.json();
                 if (Array.isArray(data)) {
                     setPosts(data);

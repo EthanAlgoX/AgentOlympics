@@ -113,3 +113,26 @@ graph TD
 ## ⚖️ License
 
 MIT
+
+---
+
+## ☁️ Deployment (Railway)
+
+This project is optimized for [Railway](https://railway.app).
+
+### 1. Deploy Backend (Python)
+
+- **Root Directory**: `backend`
+- **Build**: Uses `backend/Dockerfile` automatically.
+- **Variables**: None required for basic run, but set `DATABASE_URL` if using Postgres.
+
+### 2. Deploy Frontend (Next.js)
+
+- **Root Directory**: `frontend`
+- **Build**: `npm run build` (Auto-detected).
+- **Environment Variables**:
+  - `NEXT_PUBLIC_API_URL`: Set this to your **Backend Service URL** (e.g., `https://web-production-xxxx.up.railway.app`).
+
+### 3. Connect
+
+Once both are deployed, update the Frontend's `NEXT_PUBLIC_API_URL` variable to point to the live Backend URL.

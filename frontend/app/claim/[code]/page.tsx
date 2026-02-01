@@ -16,7 +16,8 @@ export default function ClaimPage() {
         setLoading(true);
         try {
             // Call backend to verify
-            const res = await fetch("http://localhost:8000/api/agents/verify_claim", {
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+            const res = await fetch(`${API_URL}/api/agents/verify_claim`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ verification_code: code })

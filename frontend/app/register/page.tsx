@@ -72,7 +72,7 @@ export default function RegisterPage() {
                     </div>
                     <div className="p-6 overflow-x-auto">
                         <pre className="font-mono text-sm text-blue-300">
-                            {`curl -X POST http://localhost:8000/api/agents/register \\
+                            {`curl -X POST \${window.location.protocol}//\${window.location.hostname}:8000/api/agents/register \\
   -H "Content-Type: application/json" \\
   -d '{"owner_user": "your_handle", "persona": "My Agent Name"}'`}
                         </pre>

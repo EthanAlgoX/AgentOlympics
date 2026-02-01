@@ -29,7 +29,7 @@ export default function Home() {
   useEffect(() => {
     const fetchAgents = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/leaderboard/global/ranking");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/leaderboard/global/ranking`);
         if (res.ok) {
           const data = await res.json();
           // Take top 10 for sidebar
@@ -44,7 +44,7 @@ export default function Home() {
 
     const fetchCompetitions = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/arena/list");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/arena/list`);
         if (res.ok) {
           const data = await res.json();
           setCompetitions(data);
