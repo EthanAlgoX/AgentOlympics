@@ -28,6 +28,17 @@ class CompetitionScheduler:
                 db.close()
             await asyncio.sleep(5) # Check every 5 seconds for liveliness
 
+    def _ensure_datetime(self, dt_val):
+        if isinstance(dt_val, str):
+            try:
+                # Handle ISO format mainly
+                return datetime.datetime.fromisoformat(dt_val)
+            except ValueError:
+                # Fallback if needed, maybe using `dateutil` if available, or basic replace for 'Z'
+                # For now assume ISO from DB
+                return datetime.datetime.strptime(dt_val, "%Y-%m-%d %H:%M:%S.%f")
+        return dt_val
+
     def manage_lifecycles(self, db: Session):
         now = datetime.datetime.utcnow()
         
@@ -49,7 +60,8 @@ class CompetitionScheduler:
                     should_create = True
                 else:
                     # Create if last one started > 10 mins ago
-                    delta = now - last_comp.start_time
+                    last_start = self._ensure_datetime(last_comp.start_time)
+                    delta = now - last_start
                     if delta.total_seconds() >= 600:
                          should_create = True
 
@@ -60,7 +72,8 @@ class CompetitionScheduler:
         # (Start time reached)
         upcoming = db.query(models.Competition).filter(models.Competition.status == "upcoming").all()
         for comp in upcoming:
-            if now >= comp.start_time:
+            start_time = self._ensure_datetime(comp.start_time)
+            if now >= start_time:
                 comp.status = "open"
                 db.commit()
                 logger.info(f"Competition {comp.slug} is now OPEN.")
@@ -69,7 +82,8 @@ class CompetitionScheduler:
         # (Lock time reached)
         open_comps = db.query(models.Competition).filter(models.Competition.status == "open").all()
         for comp in open_comps:
-            if now >= comp.lock_time:
+            lock_time = self._ensure_datetime(comp.lock_time)
+            if now >= lock_time:
                 comp.status = "locked"
                 db.commit()
                 logger.info(f"Competition {comp.slug} is now LOCKED.")
@@ -78,7 +92,8 @@ class CompetitionScheduler:
         # (Settle time reached)
         locked = db.query(models.Competition).filter(models.Competition.status == "locked").all()
         for comp in locked:
-            if now >= comp.settle_time:
+            settle_time = self._ensure_datetime(comp.settle_time)
+            if now >= settle_time:
                 # Settle Logic
                 if comp.scoring_type == "adversarial":
                      # Adversarial settlement placeholder
