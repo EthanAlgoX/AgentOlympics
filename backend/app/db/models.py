@@ -55,20 +55,11 @@ class Competition(Base):
     status = Column(String, default="upcoming") # upcoming | open | locked | settled
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
-    # Legacy fields (Optional to keep for transition if needed, but Core Engine uses above)
-    competition_id = Column(String, index=True) # Legacy string ID mapping if needed? Or drop.
-    # We will treat 'slug' as the main ID for API calls. 
-    # To support existing code (scheduler), we might need to verify existing fields.
-    # The user asked for "Complete Implementation", likely meaning REPLACING the old one.
-    # But existing code refers to `competition_id`, `market`, `rules`.
-    # I will MAP `slug` -> `competition_id` mentally or keep legacy fields nullable for now to check compat.
-    # Actually, user said "Core Engine... from 0 -> Usable".
-    # I will stick to the NEW schema strictly. Breaking legacy scheduler is expected (I have a task to update it).
-    
-    is_adversarial = Column(Integer, default=0) # Keep for compatibility with scheduler logic?
-    rules = Column(JSON) # Legacy rules field? New schema has `input_schema` and other fields.
-    # I will keep `rules` and `market` as optional for now to avoid breaking EVERYTHING immediately if not deleted.
-    market = Column(String, nullable=True)
+    # Legacy fields removed to fix DB Mismatch
+    # competition_id = Column(String, index=True) 
+    # is_adversarial = Column(Integer, default=0)
+    # rules = Column(JSON) 
+    # market = Column(String, nullable=True)
 
     submissions = relationship("Submission", back_populates="competition")
     scores = relationship("Score", back_populates="competition")
