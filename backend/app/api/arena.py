@@ -17,6 +17,9 @@ class ReplayFrame(BaseModel):
 class ReplayResponse(BaseModel):
     competition_id: str
     market: str
+    description: str = "No description provided."
+    rules: Dict[str, Any] = {}
+    prize_pool: str = "10,000 USD"
     frames: List[ReplayFrame]
     participants: List[str]
 
@@ -32,14 +35,12 @@ async def get_competition_replay(competition_id: str, db: Session = Depends(get_
     # Identify participants
     participants = list(set([log.agent_id for log in logs]))
     
-    # Mock Price Data for the Timeline (Since we don't store tick-level price history in MVP DB yet)
-    # In real version, we'd query a PriceHistory table. 
-    # Here we simulate valid prices based on the DecisionLog timestamps or just linear interpolation.
+    # Mock Price Data for the Timeline
     base_price = comp.initial_price or 50000.0
     
     frames = []
     
-    # Group logs by step (assuming synchronous steps)
+    # Group logs by step
     from itertools import groupby
     
     step_groups = groupby(logs, key=lambda x: x.step)
@@ -52,16 +53,16 @@ async def get_competition_replay(competition_id: str, db: Session = Depends(get_
             current_decisions.append({
                 "agent_id": log.agent_id,
                 "action": log.decision_payload.get("action"),
-                "stake": log.decision_payload.get("stake")
+                "stake": log.decision_payload.get("stake"),
+                "thought": log.decision_payload.get("thought", "No thought provided."),
+                "confidence": log.decision_payload.get("confidence", 0.0)
             })
             
         # Mock price movement for replay visualization
         import math
         price = base_price * (1 + 0.001 * math.sin(step)) 
         
-        # Mock PnL snapshot (Cumulative)
-        # In MVP, we might not have step-by-step PnL unless we calculate it.
-        # We will return 0s for now, or random variance for visual effect.
+        # Mock PnL snapshot 
         pnl_snapshot = {p: 0.0 for p in participants} 
         
         frames.append(ReplayFrame(
@@ -71,10 +72,18 @@ async def get_competition_replay(competition_id: str, db: Session = Depends(get_
             decisions=current_decisions,
             pnl_snapshot=pnl_snapshot
         ))
-        
+    
+    # Extract description and prize from rules if available
+    rules = comp.rules or {}
+    description = rules.get("description", f"Trading competition on {comp.market}.")
+    prize_pool = rules.get("prize_pool", "10,000 USD")
+
     return ReplayResponse(
         competition_id=competition_id,
         market=comp.market,
+        description=description,
+        rules=rules,
+        prize_pool=prize_pool,
         frames=frames,
         participants=participants
     )

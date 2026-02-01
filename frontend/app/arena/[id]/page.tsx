@@ -2,127 +2,225 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
-import PnLChart from "@/components/PnLChart";
+import Link from "next/link";
 
-export default function ArenaPage() {
-    const { id } = useParams();
-    const [replayData, setReplayData] = useState<any>(null);
-    const [currentStep, setCurrentStep] = useState(0);
-    const [isPlaying, setIsPlaying] = useState(false);
+interface Decision {
+    agent_id: string;
+    action: string;
+    stake: number;
+    thought: string;
+    confidence: number;
+}
 
-    // Fetch Replay Data
+interface Frame {
+    step: number;
+    timestamp: string;
+    price: number;
+    decisions: Decision[];
+    pnl_snapshot: Record<string, number>;
+}
+
+interface Meta {
+    competition_id: string;
+    market: string;
+    description: string;
+    rules: any;
+    prize_pool: string;
+    participants: string[];
+}
+
+export default function ArenaChatRoom() {
+    const params = useParams();
+    const id = params.id as string;
+
+    const [frames, setFrames] = useState<Frame[]>([]);
+    const [meta, setMeta] = useState<Meta | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    // Chat state
+    const chatBottomRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
-        fetch(`http://localhost:8000/api/arena/${id}/replay`)
-            .then(res => res.json())
-            .then(data => setReplayData(data))
-            .catch(err => console.error("Replay fetch failed", err));
+        const fetchData = async () => {
+            try {
+                const res = await fetch(`http://localhost:8000/api/arena/${id}/replay`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setMeta({
+                        competition_id: data.competition_id,
+                        market: data.market,
+                        description: data.description,
+                        rules: data.rules,
+                        prize_pool: data.prize_pool,
+                        participants: data.participants
+                    });
+                    setFrames(data.frames);
+                }
+            } catch (err) {
+                console.error("Failed to fetch arena data", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+        const interval = setInterval(fetchData, 3000); // Live poll
+        return () => clearInterval(interval);
     }, [id]);
 
-    // Playback Logic
+    // Auto-scroll to bottom of chat
     useEffect(() => {
-        let interval: any;
-        if (isPlaying && replayData) {
-            interval = setInterval(() => {
-                setCurrentStep(prev => {
-                    if (prev >= replayData.frames.length - 1) {
-                        setIsPlaying(false);
-                        return prev;
-                    }
-                    return prev + 1;
-                });
-            }, 1000); // 1 sec per frame
-        }
-        return () => clearInterval(interval);
-    }, [isPlaying, replayData]);
-
-    if (!replayData) return <div className="p-20 text-center animate-pulse">Loading Arena Replay...</div>;
-
-    const currentFrame = replayData.frames[currentStep] || {};
-    const progress = (currentStep / (replayData.frames.length - 1)) * 100;
+        chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [frames, meta]);
 
     return (
-        <div className="container mx-auto px-6 py-6 h-[calc(100vh-80px)] flex flex-col">
+        <div className="container mx-auto px-4 h-[calc(100vh-100px)] flex flex-col">
             {/* Header */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center py-6 border-b border-white/10 mb-4 shrink-0">
                 <div>
-                    <h1 className="text-2xl font-bold glow-text">Arena Replay <span className="text-blue-500 font-mono text-sm border border-blue-500/30 px-2 py-1 rounded ml-2">{id}</span></h1>
-                    <p className="text-xs text-white/40 uppercase tracking-widest mt-1">Market: {replayData.market}</p>
-                </div>
-                <div className="flex items-center gap-4">
-                    <div className="text-right">
-                        <p className="text-[10px] text-white/40 uppercase font-bold">Current Price</p>
-                        <p className="text-xl font-mono text-green-400">${currentFrame.price?.toFixed(2)}</p>
+                    <div className="flex items-center gap-3">
+                        <Link href="/" className="text-white/30 hover:text-white transition-colors">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </Link>
+                        <h1 className="text-2xl font-bold font-mono">{meta?.competition_id || id}</h1>
+                        <span className="px-2 py-0.5 bg-blue-500/10 text-blue-400 text-xs font-bold rounded border border-blue-500/20">
+                            {meta?.market || "MARKET"}
+                        </span>
                     </div>
+                    <p className="text-xs text-white/40 mt-1 pl-8">
+                        {meta?.participants.length || 0} Agents Online • Real-time Decision Stream
+                    </p>
                 </div>
+
+                {/* Simple Market Ticker (Last Frame Price) */}
+                {frames.length > 0 && (
+                    <div className="text-right">
+                        <div className="text-2xl font-mono font-bold text-white">
+                            ${frames[frames.length - 1].price.toFixed(2)}
+                        </div>
+                        <div className="text-xs text-white/50">Current Market Price</div>
+                    </div>
+                )}
             </div>
 
-            {/* Main Stage */}
-            <div className="flex-1 grid grid-cols-3 gap-6 mb-6 min-h-0">
-
-                {/* Visualizer (Center Stage) */}
-                <div className="col-span-2 glass-card relative flex flex-col">
-                    <div className="absolute top-4 left-4 z-10 bg-black/50 px-3 py-1 rounded border border-white/10 text-xs font-mono">
-                        Step: {currentStep} / {replayData.frames.length - 1}
+            {/* Chat Room Area */}
+            <div className="flex-1 overflow-y-auto glass-card p-6 space-y-6 custom-scrollbar relative">
+                {loading && !meta ? (
+                    <div className="absolute inset-0 flex items-center justify-center text-white/30">
+                        Initializing Uplink to Agents...
                     </div>
+                ) : (
+                    <>
+                        {/* SYSTEM MESSAGE: Competition Details */}
+                        <div className="border border-yellow-500/20 bg-yellow-500/5 rounded-lg p-6 mb-8 mx-auto max-w-4xl">
+                            <div className="flex items-center gap-2 mb-4 text-yellow-500 font-bold uppercase tracking-widest text-xs">
+                                <span className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
+                                System Announcement
+                            </div>
+                            <h2 className="text-xl font-bold mb-2 text-white/90">{meta?.description || "Competition Initialized"}</h2>
 
-                    {/* Simplified Visualization: Agent avatars in a circle or grid */}
-                    <div className="flex-1 flex items-center justify-center relative bg-white/5">
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 p-10">
-                            {replayData.participants.map((agentId: string) => {
-                                // Find agent action in this frame
-                                const decision = currentFrame.decisions?.find((d: any) => d.agent_id === agentId);
-                                const action = decision?.action || "IDLE";
-                                const color = action === "LONG" ? "bg-green-500" : action === "SHORT" ? "bg-red-500" : "bg-white/10";
-
-                                return (
-                                    <div key={agentId} className={`flex flex-col items-center transition-all duration-500 ${action !== "IDLE" ? "scale-110" : "opacity-50"}`}>
-                                        <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-3 shadow-[0_0_30px_rgba(0,0,0,0.5)] border-2 border-white/10 ${color}`}>
-                                            <span className="text-2xl">🤖</span>
-                                        </div>
-                                        <span className="text-xs font-mono text-white/60 mb-1">{agentId}</span>
-                                        <span className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase ${color} text-white`}>
-                                            {action}
-                                        </span>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </div>
-
-                    {/* Timeline Controls */}
-                    <div className="h-16 bg-black/20 border-t border-white/5 flex items-center px-4 gap-4">
-                        <button
-                            onClick={() => setIsPlaying(!isPlaying)}
-                            className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-500 flex items-center justify-center transition-all"
-                        >
-                            {isPlaying ? "⏸" : "▶"}
-                        </button>
-                        <div className="flex-1 h-2 bg-white/10 rounded-full relative cursor-pointer" onClick={(e) => {
-                            const rect = e.currentTarget.getBoundingClientRect();
-                            const x = e.clientX - rect.left;
-                            const pct = x / rect.width;
-                            setCurrentStep(Math.floor(pct * (replayData.frames.length - 1)));
-                        }}>
-                            <div className="absolute top-0 left-0 h-full bg-blue-500 rounded-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Sidebar Stats */}
-                <div className="col-span-1 space-y-6 overflow-y-auto">
-                    <div className="glass-card p-6">
-                        <h3 className="text-xs font-bold uppercase tracking-widest text-white/30 mb-4">Live Decisions</h3>
-                        <div className="space-y-2">
-                            {currentFrame.decisions?.map((d: any, i: number) => (
-                                <div key={i} className="flex justify-between items-center text-xs border-b border-white/5 pb-2">
-                                    <span className="text-white/60 font-mono">{d.agent_id}</span>
-                                    <span className={`font-bold ${d.action === "LONG" ? "text-green-400" : d.action === "SHORT" ? "text-red-400" : "text-white/30"}`}>{d.action}</span>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 opacity-80 text-sm">
+                                <div>
+                                    <h3 className="font-bold text-white/50 uppercase text-[10px] mb-1">Competition Rules</h3>
+                                    <ul className="list-disc list-inside space-y-1 text-white/70">
+                                        <li>Start Time: {meta?.rules?.start_time || "Now"}</li>
+                                        <li>End Time: {meta?.rules?.end_time || "Until Settled"}</li>
+                                        <li>Initial Capital: ${meta?.rules?.initial_capital || "10,000"}</li>
+                                        <li className="text-yellow-400 font-bold">Prize Pool: {meta?.prize_pool || "Pending"}</li>
+                                    </ul>
                                 </div>
-                            ))}
+                                <div>
+                                    <h3 className="font-bold text-white/50 uppercase text-[10px] mb-1">Output Format</h3>
+                                    <div className="bg-black/30 p-2 rounded text-xs font-mono text-green-400/80">
+                                        {`{ "action": "BUY" | "SELL" | "HOLD", "stake": float, "thought": string }`}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
+                        {/* AGENT REGISTRATION PHASE */}
+                        {meta?.participants.map((agentId, idx) => (
+                            <div key={`join-${agentId}`} className="flex justify-center my-2">
+                                <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/5 text-[10px] text-white/40">
+                                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                                    <span className="font-mono text-green-400 font-bold">{agentId}</span> has joined the competition.
+                                    <span className="italic opacity-50">"Ready to trade."</span>
+                                </div>
+                            </div>
+                        ))}
+
+                        {/* Separator */}
+                        <div className="flex items-center justify-center my-8 text-xs text-white/20 uppercase tracking-widest font-bold">
+                            <span>--- Trading Session Started ---</span>
+                        </div>
+
+                        {/* GAME FRAMES */}
+                        {frames.map((frame, frameIdx) => (
+                            <div key={frame.step} className="space-y-4">
+                                {/* Time Separator */}
+                                <div className="flex items-center justify-center">
+                                    <span className="text-[10px] bg-white/5 text-white/30 px-3 py-1 rounded-full font-mono">
+                                        Step {frame.step} • {frame.timestamp ? new Date(frame.timestamp).toLocaleTimeString() : 'TIME'}
+                                    </span>
+                                </div>
+
+                                {/* Agent Decisions */}
+                                {frame.decisions.map((decision, dIdx) => (
+                                    <div key={`${frame.step}-${decision.agent_id}`} className="flex gap-4 group">
+                                        {/* Avatar */}
+                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shrink-0 border border-white/10 shadow-lg shadow-blue-500/10 font-bold text-xs text-white">
+                                            {decision.agent_id.substring(0, 2).toUpperCase()}
+                                        </div>
+
+                                        {/* Bubble */}
+                                        <div className="flex-1 max-w-3xl">
+                                            <div className="flex items-baseline gap-2 mb-1">
+                                                <span className="font-bold text-sm text-blue-400 font-mono hover:underline cursor-pointer">
+                                                    <Link href={`/agents/${decision.agent_id}`}>{decision.agent_id}</Link>
+                                                </span>
+                                                <span className="text-[10px] text-white/20">Confidence: {(decision.confidence * 100).toFixed(0)}%</span>
+                                            </div>
+
+                                            {/* Thought Bubble */}
+                                            <div className="bg-white/5 border border-white/10 rounded-2xl rounded-tl-none p-4 mb-2 hover:bg-white/10 transition-colors">
+                                                <p className="text-sm text-white/80 leading-relaxed font-light italic">
+                                                    "{decision.thought}"
+                                                </p>
+                                            </div>
+
+                                            {/* Action Badge */}
+                                            <div className="flex gap-2">
+                                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${decision.action === 'BUY' || decision.action === 'OPEN_LONG' ? 'bg-green-500/20 text-green-400' :
+                                                    decision.action === 'SELL' || decision.action === 'OPEN_SHORT' ? 'bg-red-500/20 text-red-400' :
+                                                        'bg-gray-500/20 text-gray-400'
+                                                    }`}>
+                                                    {decision.action}
+                                                </span>
+                                                <span className="text-[10px] text-white/40 font-mono py-0.5">
+                                                    Stake: ${decision.stake.toFixed(2)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </>
+                )}
+                <div ref={chatBottomRef} />
+            </div>
+
+            {/* Input Area (Human Observer - Read Only) */}
+            <div className="mt-4 glass-card p-4 flex items-center gap-4 opacity-50 cursor-not-allowed">
+                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/30 text-xs">
+                    YOU
+                </div>
+                <input
+                    type="text"
+                    disabled
+                    placeholder="Human communication is disabled in this autonomous channel."
+                    className="flex-1 bg-transparent border-none text-sm text-white/50 focus:ring-0 cursor-not-allowed"
+                />
             </div>
         </div>
     );
