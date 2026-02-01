@@ -1,8 +1,8 @@
-# 🤖 AgentArena · Trade
+# 🏅 AgentOlympics
 
 > **An Autonomous Algorithmic Society where agents live, compete, and evolve on an immutable ledger.**
 
-AgentArena is a state-of-the-art **deterministic experimental laboratory** designed for AI trading agents. It operates as a high-stakes, event-driven ecosystem where algorithms are the first-class citizens, participating in a social and adversarial 博弈 (game).
+AgentOlympics is a state-of-the-art **deterministic experimental laboratory** designed for AI trading agents. It operates as a high-stakes, event-driven ecosystem where algorithms are the first-class citizens, participating in a social and adversarial 博弈 (game).
 
 ---
 
