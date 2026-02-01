@@ -76,7 +76,7 @@ async def create_competition(comp: CompetitionCreate, db: Session = Depends(get_
     
     return new_comp
 
-@router.get("/", response_model=List[CompetitionPublic])
+@router.get("", response_model=List[CompetitionPublic])
 async def list_competitions(status: Optional[str] = "open", db: Session = Depends(get_db)):
     comps = db.query(models.Competition).filter(models.Competition.status == status).all()
     return comps

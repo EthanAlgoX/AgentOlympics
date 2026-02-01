@@ -1,14 +1,46 @@
 import datetime
 import uuid
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, JSON, Boolean, text, Numeric, UniqueConstraint
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, JSON, Boolean, text, Numeric, UniqueConstraint, TypeDecorator
+from sqlalchemy.dialects.postgresql import UUID as PG_UUID, JSONB
 from sqlalchemy.orm import relationship
-from app.db.session import Base
+from app.db.session import Base, DATABASE_URL
+
+class GUID(TypeDecorator):
+    """Platform-independent GUID type.
+    Uses PostgreSQL's UUID type, otherwise uses CHAR(32), storing as string without dashes.
+    """
+    impl = String(36)
+    cache_ok = True
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == 'postgresql':
+            return dialect.type_descriptor(PG_UUID(as_uuid=True))
+        else:
+            return dialect.type_descriptor(String(36))
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return value
+        elif dialect.name == 'postgresql':
+            return str(value)
+        else:
+            if not isinstance(value, uuid.UUID):
+                return str(uuid.UUID(value))
+            else:
+                return str(value)
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return value
+        if not isinstance(value, uuid.UUID):
+            return uuid.UUID(value)
+        else:
+            return value
 
 class Agent(Base):
     __tablename__ = "agents"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     name = Column(String, unique=True, nullable=False)
     description = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
@@ -30,8 +62,8 @@ class Agent(Base):
 class AgentKey(Base):
     __tablename__ = "agent_keys"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
-    agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"))
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    agent_id = Column(GUID(), ForeignKey("agents.id"))
     api_key = Column(String, unique=True, nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     revoked_at = Column(DateTime, nullable=True)
@@ -41,11 +73,11 @@ class AgentKey(Base):
 class Competition(Base):
     __tablename__ = "competitions"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     slug = Column(String, unique=True, nullable=False)
     title = Column(String, nullable=False)
     description = Column(String)
-    input_schema = Column(JSONB, nullable=False)
+    input_schema = Column(JSONB if DATABASE_URL.startswith("postgres") else JSON, nullable=False)
     scoring_type = Column(String, nullable=False) # accuracy | pnl | custom
     
     start_time = Column(DateTime, nullable=False)
@@ -67,10 +99,10 @@ class Competition(Base):
 class Submission(Base):
     __tablename__ = "submissions"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
-    competition_id = Column(UUID(as_uuid=True), ForeignKey("competitions.id"), nullable=False)
-    agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"), nullable=False)
-    payload = Column(JSONB, nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    competition_id = Column(GUID(), ForeignKey("competitions.id"), nullable=False)
+    agent_id = Column(GUID(), ForeignKey("agents.id"), nullable=False)
+    payload = Column(JSONB if DATABASE_URL.startswith("postgres") else JSON, nullable=False)
     submitted_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     __table_args__ = (
@@ -83,11 +115,11 @@ class Submission(Base):
 class Score(Base):
     __tablename__ = "scores"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
-    competition_id = Column(UUID(as_uuid=True), ForeignKey("competitions.id"), nullable=False)
-    agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    competition_id = Column(GUID(), ForeignKey("competitions.id"), nullable=False)
+    agent_id = Column(GUID(), ForeignKey("agents.id"), nullable=False)
     score = Column(Numeric, nullable=False)
-    details = Column(JSONB)
+    details = Column(JSONB if DATABASE_URL.startswith("postgres") else JSON)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     __table_args__ = (
@@ -101,7 +133,7 @@ class Post(Base):
     __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True, index=True)
-    agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id")) # UUID FK
+    agent_id = Column(GUID(), ForeignKey("agents.id")) # UUID FK
     content = Column(String)
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
     
@@ -109,12 +141,12 @@ class LedgerEvent(Base):
     __tablename__ = "ledger_events"
 
     id = Column(Integer, primary_key=True, index=True)
-    agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"), index=True)
+    agent_id = Column(GUID(), ForeignKey("agents.id"), index=True)
     # This refers to competition.id (UUID) now, or we keep string for legacy?
     # Ideally link to competitions.id. But existing data is string.
     # I'll update to UUID FK but assume data migration or new DB.
     # Actually wait, `db.ForeignKey` expects table.column. `competitions.id` is UUID.
-    competition_id_uuid = Column(UUID(as_uuid=True), ForeignKey("competitions.id"), nullable=True)
+    competition_id_uuid = Column(GUID(), ForeignKey("competitions.id"), nullable=True)
     competition_id = Column(String, index=True) # Keep string for broader compat with legacy logs?
     
     event_type = Column(String) 
@@ -126,7 +158,7 @@ class LedgerEvent(Base):
 class DecisionLog(Base): # Replaced by Submission
     __tablename__ = "decision_logs"
     id = Column(Integer, primary_key=True, index=True)
-    agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"))
+    agent_id = Column(GUID(), ForeignKey("agents.id"))
     competition_id = Column(String)
     step = Column(Integer)
     decision_payload = Column(JSON) 
@@ -135,7 +167,7 @@ class DecisionLog(Base): # Replaced by Submission
 class LeaderboardSnapshot(Base): # Replaced by Score + Dynamic queries
     __tablename__ = "leaderboard_snapshots"
     id = Column(Integer, primary_key=True, index=True)
-    agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"))
+    agent_id = Column(GUID(), ForeignKey("agents.id"))
     competition_id = Column(String)
     pnl = Column(Float)
     win_rate = Column(Float)
@@ -149,8 +181,8 @@ class DuelResult(Base):
     __tablename__ = "duel_results"
     id = Column(Integer, primary_key=True, index=True)
     competition_id = Column(String)
-    winner_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"))
-    loser_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"))
+    winner_id = Column(GUID(), ForeignKey("agents.id"))
+    loser_id = Column(GUID(), ForeignKey("agents.id"))
     pnl_differential = Column(Float)
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
 
@@ -158,7 +190,7 @@ class SocialReaction(Base):
     __tablename__ = "social_reactions"
     id = Column(Integer, primary_key=True, index=True)
     post_id = Column(Integer, ForeignKey("posts.id"))
-    reactor_agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"))
+    reactor_agent_id = Column(GUID(), ForeignKey("agents.id"))
     reaction_type = Column(String) 
     sentiment_score = Column(Float)
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
@@ -176,7 +208,7 @@ class TournamentBracket(Base):
     tournament_id = Column(Integer, ForeignKey("tournaments.id"))
     round = Column(Integer)
     match_id = Column(Integer)
-    agent_a_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"))
-    agent_b_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"))
-    winner_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"), nullable=True)
+    agent_a_id = Column(GUID(), ForeignKey("agents.id"))
+    agent_b_id = Column(GUID(), ForeignKey("agents.id"))
+    winner_id = Column(GUID(), ForeignKey("agents.id"), nullable=True)
     competition_id = Column(String, nullable=True)
