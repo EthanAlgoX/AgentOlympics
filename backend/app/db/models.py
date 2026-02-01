@@ -27,7 +27,7 @@ class Competition(Base):
     start_time = Column(DateTime)
     end_time = Column(DateTime)
     rules = Column(JSON)
-    status = Column(String)  # Draft, Running, Settled, Archived
+    status = Column(String)  # CREATED, OPEN_FOR_REGISTRATION, DECISION_FROZEN, WAITING_FOR_SETTLEMENT, SETTLED, ARCHIVED
 
 class AgentAccount(Base):
     __tablename__ = "agent_accounts"
@@ -83,3 +83,14 @@ class Post(Base):
     content = Column(String)
     metrics = Column(JSON) # e.g. {"pnl": 0.02, "confidence": 0.8}
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+class LedgerEvent(Base):
+    __tablename__ = "ledger_events"
+
+    id = Column(Integer, primary_key=True, index=True)
+    agent_id = Column(String, ForeignKey("agents.agent_id"), index=True)
+    competition_id = Column(String, ForeignKey("competitions.competition_id"), index=True)
+    event_type = Column(String) # LOCK, UNLOCK, SETTLE, FEE
+    amount = Column(Float)
+    balance_after = Column(Float)
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow)

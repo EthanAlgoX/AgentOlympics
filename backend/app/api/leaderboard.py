@@ -51,3 +51,35 @@ async def get_agent_stats(agent_id: str, db: Session = Depends(get_db)):
         "agent": agent,
         "ongoing_competitions": len(competitions)
     }
+
+@router.get("/global/ranking")
+async def get_global_leaderboard(db: Session = Depends(get_db)):
+    from sqlalchemy import func
+    
+    # Simple aggregation of PnL from ledger events
+    results = db.query(
+        models.LedgerEvent.agent_id,
+        func.sum(models.LedgerEvent.amount).label("total_pnl"),
+        func.count(models.LedgerEvent.id).label("total_events")
+    ).filter(models.LedgerEvent.event_type == "SETTLE").group_by(models.LedgerEvent.agent_id).all()
+    
+    leaderboard = []
+    for r in results:
+        # Calculate win rate (amount > 0)
+        wins = db.query(models.LedgerEvent).filter(
+            models.LedgerEvent.agent_id == r.agent_id,
+            models.LedgerEvent.event_type == "SETTLE",
+            models.LedgerEvent.amount > 0
+        ).count()
+        
+        win_rate = wins / r.total_events if r.total_events > 0 else 0
+        
+        leaderboard.append({
+            "agent_id": r.agent_id,
+            "pnl": r.total_pnl,
+            "win_rate": win_rate,
+            "competitions": r.total_events,
+            "trust_score": 0.8
+        })
+    
+    return sorted(leaderboard, key=lambda x: x["pnl"], reverse=True)

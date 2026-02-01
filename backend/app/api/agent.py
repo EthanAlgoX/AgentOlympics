@@ -36,31 +36,40 @@ async def register_agent(agent_data: AgentCreate, db: Session = Depends(get_db))
     db.refresh(db_agent)
     return db_agent
 
-class DecisionPayload(BaseModel):
+class DecisionInput(BaseModel):
+    competition: dict
+    account: dict
+    market_snapshot: dict
+
+class DecisionOutput(BaseModel):
     action: str
-    symbol: str
-    size: float
+    stake: float
     confidence: float
-    reason: str
 
-class DecisionRequest(BaseModel):
-    agent_id: str
-    competition_id: str
-    step: int
-    payload: DecisionPayload
+@router.post("/submit_decision/{competition_id}/{agent_id}")
+async def submit_decision(competition_id: str, agent_id: str, decision: DecisionOutput, db: Session = Depends(get_db)):
+    # 1. Validate competition status
+    comp = db.query(models.Competition).filter(models.Competition.competition_id == competition_id).first()
+    if not comp or comp.status != "OPEN_FOR_REGISTRATION":
+        raise HTTPException(status_code=400, detail="Competition not open for registration or decisions frozen.")
 
-@router.post("/decision")
-async def submit_decision(decision: DecisionRequest, db: Session = Depends(get_db)):
-    # Log decision for auditability
+    # 2. Validate stake vs rules
+    initial_cap = comp.rules.get("initial_capital", 10000)
+    max_stake = initial_cap * comp.rules.get("max_stake_ratio", 0.3)
+    if decision.stake > max_stake:
+        raise HTTPException(status_code=400, detail=f"Stake {decision.stake} exceeds limit {max_stake}")
+
+    # 3. Log decision
     db_log = models.DecisionLog(
-        agent_id=decision.agent_id,
-        competition_id=decision.competition_id,
-        step=decision.step,
-        decision_payload=decision.payload.dict()
+        agent_id=agent_id,
+        competition_id=competition_id,
+        step=0,
+        decision_payload=decision.dict()
     )
     db.add(db_log)
     db.commit()
-    return {"status": "logged", "step": decision.step}
+    
+    return {"status": "success", "agent_id": agent_id}
 
 @router.post("/heartbeat")
 async def agent_heartbeat(agent_id: str, db: Session = Depends(get_db)):

@@ -145,18 +145,23 @@ class LiveCompetitionExecutor(CompetitionExecutor):
         self.step += 1
         current_price = tick["price"]
         
-        # Format tick for agents
+        # Format tick for agents (Formal Design Protocol)
         tick_data = {
-            "meta": {
+            "competition": {
                 "competition_id": self.competition_id,
-                "step": self.step,
-                "timestamp": tick["timestamp"]
-            },
-            "market": {
                 "symbol": tick["symbol"],
-                "ohlcv": [[datetime.datetime.fromisoformat(tick["timestamp"]).timestamp(), current_price, current_price, current_price, current_price, 0]]
+                "decision_deadline": "N/A", # Will be filled properly in scheduler-driven mode
+                "settlement_time": "N/A"
             },
-            "account": {}
+            "account": {
+                "cash": 10000, # Placeholder until ledger integration is deep
+                "locked": 0,
+                "realized_pnl": 0
+            },
+            "market_snapshot": {
+                "price": current_price,
+                "timestamp": tick["timestamp"]
+            }
         }
 
         # Run agents concurrently
