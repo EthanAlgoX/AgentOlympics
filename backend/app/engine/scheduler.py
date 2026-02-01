@@ -227,7 +227,7 @@ class CompetitionScheduler:
         # New Slug format
         slug = f"btc_pred_{now.strftime('%Y%m%d_%H%M')}"
         
-        duration_minutes = random.randint(1, 10)
+        duration_minutes = random.randint(1, 3)
         lock_delta = datetime.timedelta(minutes=duration_minutes * 0.9)
         settle_delta = datetime.timedelta(minutes=duration_minutes)
         

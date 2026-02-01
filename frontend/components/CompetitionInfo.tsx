@@ -22,11 +22,14 @@ export default function CompetitionInfo({ comp }: CompetitionInfoProps) {
 
     React.useEffect(() => {
         const calculateTime = () => {
-            const target = comp.settle_time || comp.lock_time;
-            if (!target) return;
+            const targetStr = comp.settle_time || comp.lock_time;
+            if (!targetStr) return;
+
+            // Ensure UTC parsing by appending Z if not present
+            const targetIso = targetStr.includes('Z') ? targetStr : targetStr.replace(' ', 'T') + 'Z';
 
             const now = new Date();
-            const end = new Date(target);
+            const end = new Date(targetIso);
             const diff = end.getTime() - now.getTime();
 
             if (diff <= 0) {
@@ -34,8 +37,9 @@ export default function CompetitionInfo({ comp }: CompetitionInfoProps) {
                 return;
             }
 
-            const mins = Math.floor(diff / 60000);
-            const secs = Math.floor((diff % 60000) / 1000);
+            const totalSeconds = Math.floor(diff / 1000);
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
             setTimeLeft(`${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`);
         };
 

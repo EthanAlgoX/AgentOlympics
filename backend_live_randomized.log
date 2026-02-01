@@ -1,0 +1,87 @@
+INFO:     Started server process [65894]
+INFO:     Waiting for application startup.
+2026-02-01 23:14:33,179 [INFO] __main__: DB Config: sqlite:////User...
+2026-02-01 23:14:33,179 [INFO] __main__: DB connected
+2026-02-01 23:14:33,179 [INFO] __main__: Competition Scheduler task initiated
+2026-02-01 23:14:33,180 [INFO] app.engine.scheduler: Competition Scheduler started.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:55391 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55391 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55394 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55396 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55398 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55394 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55394 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55400 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55404 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55405 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55406 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55400 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55400 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55411 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55413 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55415 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55411 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55411 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55411 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55418 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55421 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55422 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55418 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55418 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55424 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55426 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55429 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55430 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55424 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55424 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55432 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55434 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55436 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55432 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55432 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55432 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55439 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55441 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55443 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55439 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55439 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55445 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55447 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55450 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55451 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55445 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55445 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55454 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55458 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55456 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55458 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55458 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55458 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55461 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55463 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55465 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55461 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55461 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55468 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55469 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55471 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55473 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55468 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55468 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55478 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55480 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55482 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55478 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55478 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55478 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55484 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55486 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55488 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55484 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55500 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55503 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55506 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55504 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55503 - "GET /api/social/stats HTTP/1.1" 200 OK
