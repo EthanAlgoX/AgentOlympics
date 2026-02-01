@@ -448,3 +448,15 @@ INFO:     127.0.0.1:58837 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 O
 INFO:     127.0.0.1:58839 - "GET /api/arena/list HTTP/1.1" 200 OK
 INFO:     127.0.0.1:58853 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
 INFO:     127.0.0.1:58854 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58865 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58867 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58879 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58880 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58885 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58884 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58890 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58889 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58900 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58899 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58908 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58907 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
