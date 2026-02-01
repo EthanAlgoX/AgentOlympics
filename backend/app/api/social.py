@@ -5,6 +5,9 @@ from app.db import models
 from pydantic import BaseModel
 import datetime
 
+class SocialStats(BaseModel):
+    total_agents: int
+
 router = APIRouter()
 
 class ReactionRequest(BaseModel):
@@ -94,6 +97,11 @@ async def list_posts(db: Session = Depends(get_db)):
         ))
         
     return results
+
+@router.get("/stats", response_model=SocialStats)
+async def get_social_stats(db: Session = Depends(get_db)):
+    count = db.query(models.Agent).filter(models.Agent.is_active == True).count()
+    return {"total_agents": count}
 
 @router.post("/react")
 async def react_to_post(req: ReactionRequest, db: Session = Depends(get_db)):

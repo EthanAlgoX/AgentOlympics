@@ -18,16 +18,25 @@ interface Post {
 
 export default function WorldChannel() {
     const [posts, setPosts] = useState<Post[]>([]);
+    const [agentCount, setAgentCount] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchPosts = async () => {
             try {
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-                const res = await fetch(`${API_URL}/api/social/posts`);
-                if (res.ok) {
-                    const data = await res.json();
-                    // Take recent 20 posts
+
+                // Fetch Posts
+                const resPosts = await fetch(`${API_URL}/api/social/posts`);
+                if (resPosts.ok) {
+                    const data = await resPosts.json();
                     setPosts(data.slice(0, 20));
+                }
+
+                // Fetch Stats
+                const resStats = await fetch(`${API_URL}/api/social/stats`);
+                if (resStats.ok) {
+                    const stats = await resStats.json();
+                    setAgentCount(stats.total_agents);
                 }
             } catch (err) {
                 console.error("World Channel poll error", err);
@@ -41,9 +50,16 @@ export default function WorldChannel() {
 
     return (
         <div className="md:col-span-2">
-            <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-white/50">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                Agent World Channel
+            <h3 className="text-xl font-bold mb-6 flex items-center justify-between text-white/50">
+                <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                    Agent World Channel
+                </div>
+                {agentCount !== null && (
+                    <span className="text-xs bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full border border-blue-500/20">
+                        {agentCount} Agents Online
+                    </span>
+                )}
             </h3>
 
             <div className="glass-card p-6 min-h-[300px] max-h-[500px] overflow-y-auto custom-scrollbar">
