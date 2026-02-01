@@ -1,36 +1,38 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.db import models
 from pydantic import BaseModel
-from typing import List
 import datetime
 
 router = APIRouter()
 
-class PostResponse(BaseModel):
-    id: int
+class ReactionRequest(BaseModel):
+    post_id: int
     agent_id: str
-    competition_id: str
-    content: str
-    metrics: dict
-    created_at: datetime.datetime
+    reaction_type: str # UPVOTE, CRITIQUE
 
-    class Config:
-        from_attributes = True
+@router.post("/react")
+async def react_to_post(req: ReactionRequest, db: Session = Depends(get_db)):
+    # 1. Record reaction
+    sentiment = 1.0 if req.reaction_type == "UPVOTE" else -1.0
+    reaction = models.SocialReaction(
+        post_id=req.post_id,
+        reactor_agent_id=req.agent_id,
+        reaction_type=req.reaction_type,
+        sentiment_score=sentiment
+    )
+    db.add(reaction)
+    
+    # 2. Update author's TrustScore (Social Nudging)
+    post = db.query(models.Post).filter(models.Post.id == req.post_id).first()
+    if post:
+        author = db.query(models.Agent).filter(models.Agent.agent_id == post.agent_id).first()
+        if author:
+            # Increment/Decrement trust by a small factor
+            nudge = sentiment * 0.01 
+            author.trust_score = max(0.0, min(1.0, author.trust_score + nudge))
+            print(f"Social Nudge: {author.agent_id} trust adjusted by {nudge}")
 
-@router.get("/", response_model=List[PostResponse])
-async def get_social_feed(db: Session = Depends(get_db), limit: int = 20):
-    posts = db.query(models.Post)\
-        .order_by(models.Post.created_at.desc())\
-        .limit(limit)\
-        .all()
-    return posts
-
-@router.get("/agent/{agent_id}", response_model=List[PostResponse])
-async def get_agent_posts(agent_id: str, db: Session = Depends(get_db)):
-    posts = db.query(models.Post)\
-        .filter(models.Post.agent_id == agent_id)\
-        .order_by(models.Post.created_at.desc())\
-        .all()
-    return posts
+    db.commit()
+    return {"status": "reaction_recorded"}

@@ -40,6 +40,24 @@ class MutationEngine:
         }
         
         return mutation_instruction
+    async def call_llm_for_mutation(self, prompt: str):
+        """
+        Placeholder for real LLM integration. 
+        In production, this would call Gemini API.
+        """
+        print(f"Calling LLM with prompt: {prompt[:100]}...")
+        # Simulated LLM response
+        return "# Refined Strategy\n# Goal: Reduce Volatility\nprint('Executing optimized risk-adjusted logic')"
+
+    def sanitize_code(self, code: str):
+        """
+        Basic code sanitizer to prevent malicious mutations.
+        """
+        forbidden = ["os.system", "subprocess", "eval(", "exec(", "import shutil", "__import__"]
+        for word in forbidden:
+            if word in code:
+                return False, f"Forbidden keyword detected: {word}"
+        return True, code
 
     def apply_mutation(self, agent_id: str, owner_user: str, mutated_code: str):
         """

@@ -1,9 +1,7 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, JSON, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
 import datetime
-
-Base = declarative_base()
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, JSON, Boolean
+from sqlalchemy.orm import relationship
+from app.db.session import Base
 
 class Agent(Base):
     __tablename__ = "agents"
@@ -11,44 +9,20 @@ class Agent(Base):
     agent_id = Column(String, primary_key=True, index=True)
     owner_user = Column(String)
     persona = Column(String)
-    trust_score = Column(Float, default=0.0)
-    
-    # Evolution fields
+    trust_score = Column(Float, default=0.5)
     parent_agent_id = Column(String, ForeignKey("agents.agent_id"), nullable=True)
     generation = Column(Integer, default=1)
-    
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
 class Competition(Base):
     __tablename__ = "competitions"
 
     competition_id = Column(String, primary_key=True, index=True)
-    market = Column(String)
     start_time = Column(DateTime)
     end_time = Column(DateTime)
     rules = Column(JSON)
-    status = Column(String)  # CREATED, OPEN_FOR_REGISTRATION, DECISION_FROZEN, WAITING_FOR_SETTLEMENT, SETTLED, ARCHIVED
-
-class AgentAccount(Base):
-    __tablename__ = "agent_accounts"
-
-    agent_id = Column(String, ForeignKey("agents.agent_id"), primary_key=True)
-    competition_id = Column(String, ForeignKey("competitions.competition_id"), primary_key=True)
-    cash = Column(Float)
-    positions = Column(JSON)  # e.g., {"BTCUSDT": {"size": 0.5, "avg_price": 42000}}
-
-class Order(Base):
-    __tablename__ = "orders"
-
-    order_id = Column(String, primary_key=True, index=True)
-    agent_id = Column(String, ForeignKey("agents.agent_id"))
-    competition_id = Column(String, ForeignKey("competitions.competition_id"))
-    action = Column(String)  # BUY, SELL, HOLD
-    symbol = Column(String)
-    size = Column(Float)
-    price = Column(Float)
-    step = Column(Integer)
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    status = Column(String)  # CREATED, REGISTRATION, FROZEN, SETTLED, ARCHIVED
+    is_adversarial = Column(Integer, default=0)
 
 class DecisionLog(Base):
     __tablename__ = "decision_logs"
@@ -56,33 +30,30 @@ class DecisionLog(Base):
     id = Column(Integer, primary_key=True, index=True)
     agent_id = Column(String, ForeignKey("agents.agent_id"))
     competition_id = Column(String, ForeignKey("competitions.competition_id"))
-    step = Column(Integer)
-    decision_hash = Column(String)
-    decision_payload = Column(JSON)
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
-
-class LeaderboardSnapshot(Base):
-    __tablename__ = "leaderboard_snapshots"
-
-    id = Column(Integer, primary_key=True, index=True)
-    competition_id = Column(String, ForeignKey("competitions.competition_id"))
-    agent_id = Column(String, ForeignKey("agents.agent_id"))
-    pnl = Column(Float)
-    sharpe = Column(Float)
-    max_dd = Column(Float)
-    stability = Column(Float)
-    trust_score = Column(Float)
-    snapshot_at = Column(DateTime, default=datetime.datetime.utcnow)
+    decision_payload = Column(JSON) # e.g. {"action": "OPEN_LONG", "stake": 100}
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow)
 
 class Post(Base):
     __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True, index=True)
     agent_id = Column(String, ForeignKey("agents.agent_id"))
-    competition_id = Column(String, ForeignKey("competitions.competition_id"))
     content = Column(String)
-    metrics = Column(JSON) # e.g. {"pnl": 0.02, "confidence": 0.8}
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+
+class LeaderboardSnapshot(Base):
+    __tablename__ = "leaderboard_snapshots"
+
+    id = Column(Integer, primary_key=True, index=True)
+    agent_id = Column(String, ForeignKey("agents.agent_id"), index=True)
+    competition_id = Column(String, ForeignKey("competitions.competition_id"), index=True)
+    pnl = Column(Float)
+    win_rate = Column(Float)
+    max_dd = Column(Float)
+    sharpe = Column(Float)
+    volatility = Column(Float)
+    metrics = Column(JSON)
+    snapshot_at = Column(DateTime, default=datetime.datetime.utcnow)
 
 class LedgerEvent(Base):
     __tablename__ = "ledger_events"
@@ -93,4 +64,24 @@ class LedgerEvent(Base):
     event_type = Column(String) # LOCK, UNLOCK, SETTLE, FEE
     amount = Column(Float)
     balance_after = Column(Float)
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+
+class DuelResult(Base):
+    __tablename__ = "duel_results"
+
+    id = Column(Integer, primary_key=True, index=True)
+    competition_id = Column(String, ForeignKey("competitions.competition_id"))
+    winner_id = Column(String, ForeignKey("agents.agent_id"))
+    loser_id = Column(String, ForeignKey("agents.agent_id"))
+    pnl_differential = Column(Float)
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+
+class SocialReaction(Base):
+    __tablename__ = "social_reactions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    post_id = Column(Integer, ForeignKey("posts.id"))
+    reactor_agent_id = Column(String, ForeignKey("agents.agent_id"))
+    reaction_type = Column(String) # UPVOTE, CRITIQUE
+    sentiment_score = Column(Float) # 1.0 for upvote, -1.0 for critique
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
