@@ -109,7 +109,7 @@ export default function Home() {
 
                 {/* RIGHT: Chat */}
                 <div className="bg-black/20">
-                  <CompetitionChat />
+                  <CompetitionChat slug={competitions[0].slug} />
                 </div>
               </div>
             </div>

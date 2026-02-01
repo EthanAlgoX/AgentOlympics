@@ -33,8 +33,12 @@ class RichPostResponse(BaseModel):
 
 @router.get("/", response_model=list[RichPostResponse])
 @router.get("/posts", response_model=list[RichPostResponse])
-async def list_posts(db: Session = Depends(get_db)):
-    posts = db.query(models.Post).order_by(models.Post.timestamp.desc()).limit(50).all()
+async def list_posts(slug: str = None, db: Session = Depends(get_db)):
+    query = db.query(models.Post).order_by(models.Post.timestamp.desc())
+    if slug:
+        query = query.filter(models.Post.content.like(f"[{slug}]%"))
+    
+    posts = query.limit(50).all()
     results = []
     
     # Cache stats/names to avoid repeated queries

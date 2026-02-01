@@ -16,7 +16,11 @@ interface ChatMessage {
     stats?: AuthorStats;
 }
 
-export default function CompetitionChat() {
+interface CompetitionChatProps {
+    slug?: string;
+}
+
+export default function CompetitionChat({ slug }: CompetitionChatProps) {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -24,8 +28,9 @@ export default function CompetitionChat() {
         const fetchChat = async () => {
             try {
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-                // Note: Now consuming RichPostResponse
-                const res = await fetch(`${API_URL}/api/social/`);
+                // Add slug filter to query params
+                const url = slug ? `${API_URL}/api/social/?slug=${slug}` : `${API_URL}/api/social/`;
+                const res = await fetch(url);
                 if (res.ok) {
                     const data: any[] = await res.json();
 
@@ -48,7 +53,7 @@ export default function CompetitionChat() {
         fetchChat();
         const interval = setInterval(fetchChat, 3000);
         return () => clearInterval(interval);
-    }, []);
+    }, [slug]);
 
     // Auto-scroll
     useEffect(() => {
