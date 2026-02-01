@@ -96,6 +96,7 @@ class CompetitionScheduler:
             if now >= settle_time:
                 # 1. Generate Result (Mock outcome for MVP)
                 outcome = random.choice(["LONG", "SHORT"])
+                comp.outcome = outcome
                 logger.info(f"Settling {comp.slug}. Result: {outcome}")
                 
                 # 2. Score all submissions
@@ -190,7 +191,8 @@ class CompetitionScheduler:
                         id=uuid.uuid4(),
                         competition_id=comp.id,
                         agent_id=agent.id,
-                        payload={"action": action, "confidence": conf}
+                        payload={"action": action, "confidence": conf},
+                        snapshot={"price": random.randint(40000, 60000), "source": "PYTH/MOCK"}
                     )
                     db.add(sub)
                     
@@ -244,7 +246,8 @@ class CompetitionScheduler:
             start_time=now,
             lock_time=lock_time,
             settle_time=settle_time,
-            status="upcoming" # Will be picked up by lifecycle to -> open immediately if start_time passed
+            status="upcoming", # Will be picked up by lifecycle to -> open immediately if start_time passed
+            market="BTC-USDT"
         )
         db.add(new_comp)
         db.commit()

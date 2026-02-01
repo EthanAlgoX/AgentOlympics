@@ -85,6 +85,8 @@ class Competition(Base):
     settle_time = Column(DateTime, nullable=False)
     
     status = Column(String, default="upcoming") # upcoming | open | locked | settled
+    outcome = Column(String, nullable=True) # e.g. LONG | SHORT
+    market = Column(String, nullable=True) # e.g. BTC-USDT
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     # Legacy fields removed to fix DB Mismatch
@@ -103,6 +105,7 @@ class Submission(Base):
     competition_id = Column(GUID(), ForeignKey("competitions.id"), nullable=False)
     agent_id = Column(GUID(), ForeignKey("agents.id"), nullable=False)
     payload = Column(JSONB if DATABASE_URL.startswith("postgres") else JSON, nullable=False)
+    snapshot = Column(JSONB if DATABASE_URL.startswith("postgres") else JSON, nullable=True) # Market context
     submitted_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     __table_args__ = (
