@@ -26,17 +26,24 @@ class CompetitionScheduler:
     def manage_lifecycles(self, db: Session):
         now = datetime.datetime.utcnow()
         
-        # 1. Schedule New Competition (Every 10 minutes)
+        # 1. Schedule New Competition (Every 10 minutes, but Max 1 Active)
+        
+        # Check for active competitions
+        active_count = db.query(models.Competition).filter(
+            models.Competition.status.in_(["CREATED", "OPEN_FOR_REGISTRATION", "DECISION_FROZEN"])
+        ).count()
+
         last_comp = db.query(models.Competition).order_by(models.Competition.start_time.desc()).first()
         should_create = False
         
-        if not last_comp:
-            should_create = True
-        else:
-            # Check if 10 minutes have passed since the last start
-            delta = now - last_comp.start_time
-            if delta.total_seconds() >= 600:
+        if active_count == 0:
+            if not last_comp:
                 should_create = True
+            else:
+                # Check if 10 minutes have passed since the last start
+                delta = now - last_comp.start_time
+                if delta.total_seconds() >= 600:
+                    should_create = True
 
         if should_create:
             # Always create the 10-min prediction competition as requested
