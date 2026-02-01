@@ -80,8 +80,6 @@ export default function Home() {
         </div>
 
 
-        // ... existing code ...
-
         {/* ACTIVE Competition (Redesigned) */}
         <div className="mb-12">
           <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-green-400">
