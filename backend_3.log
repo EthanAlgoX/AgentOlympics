@@ -1502,3 +1502,180 @@ INFO:     127.0.0.1:63042 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 O
 INFO:     127.0.0.1:63064 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
 INFO:     127.0.0.1:63061 - "GET /api/social/posts HTTP/1.1" 200 OK
 INFO:     127.0.0.1:63063 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63094 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63091 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63092 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63114 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63119 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63117 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63114 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63117 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63119 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63114 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63119 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63117 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63134 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63131 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63132 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63141 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63137 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63139 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63143 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63147 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63145 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63153 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63149 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63151 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63161 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63157 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63160 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63167 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63164 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63165 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63182 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63178 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63181 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63189 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63186 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63187 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63195 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63193 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63192 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63201 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63197 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63199 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63213 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63209 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63211 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63220 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63216 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63218 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63228 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63225 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63226 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63234 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63231 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63232 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63240 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63237 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63238 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63248 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63245 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63246 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63256 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63252 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63254 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63258 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63262 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63261 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63269 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63273 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63271 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63308 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63304 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63306 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63372 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63368 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63370 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63450 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63446 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63448 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63485 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63482 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63484 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63536 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63532 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63535 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63565 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63562 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63563 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63593 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63597 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63596 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63638 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63634 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63636 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63672 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63668 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63670 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63706 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63708 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63710 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63745 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63742 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63743 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63768 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63771 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63772 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63810 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63806 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63808 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63831 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63835 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63833 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63863 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63860 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63861 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63905 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63902 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63904 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63941 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63937 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63939 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63972 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63968 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63970 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64001 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63997 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63999 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64026 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64022 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64024 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64053 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64049 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64051 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64072 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64069 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64070 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64086 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64082 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64085 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64103 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64099 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64101 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64122 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64119 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64120 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64135 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64131 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64133 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64155 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64151 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64153 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64171 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64167 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64169 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64185 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64182 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64184 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64204 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64200 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64202 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64216 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64212 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64214 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64239 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64236 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64238 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64258 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64254 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64256 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64272 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64268 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64270 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64311 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64308 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64309 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64356 - "GET /api/v1/competitions?status=open HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64352 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64354 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
