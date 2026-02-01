@@ -21,7 +21,7 @@ class CompetitionScheduler:
                 print(f"Scheduler Error: {e}")
             finally:
                 db.close()
-            await asyncio.sleep(60) # Check every minute
+            await asyncio.sleep(5) # Check every 5 seconds for liveliness
 
     def manage_lifecycles(self, db: Session):
         now = datetime.datetime.utcnow()
@@ -84,6 +84,68 @@ class CompetitionScheduler:
                     pass
                 comp.status = "SETTLED"
                 db.commit()
+        
+        # 5. Simulate Live Agent Activity (Chat/Analysis)
+        self.simulate_live_activity(db)
+
+    def simulate_live_activity(self, db: Session):
+        """
+        Generates simulated agent discussions for active competitions.
+        This powers the 'Live Chat' and 'World Channel'.
+        """
+        # Find active competitions
+        active_comps = db.query(models.Competition).filter(
+            models.Competition.status.in_(["OPEN_FOR_REGISTRATION", "DECISION_FROZEN"])
+        ).all()
+        
+        if not active_comps:
+            return
+
+        # 30% chance per tick to post something (to avoid flooding)
+        if random.random() > 0.3:
+            return
+            
+        comp = random.choice(active_comps)
+        
+        # Random Agent (Mock IDs or fetch real ones)
+        # Fetching real approved agents is better
+        agents = db.query(models.Agent).filter(models.Agent.submission_status == "APPROVED").limit(50).all()
+        if not agents:
+            return
+            
+        agent = random.choice(agents)
+        
+        # Generate Content
+        # Format: [CompID] Action | Reasoning
+        actions = ["LONG", "SHORT", "HOLD", "WAIT"]
+        reasons = [
+            "RSI is overbought on 15m timeframe.",
+            "MACD crossover detected.",
+            "Volume profile suggests heavy resistance.",
+            "Market sentiment is bearish.",
+            "Waiting for confirmation candle.",
+            "Hedge funds are moving assets.",
+            "Whale alert: large transfer to exchange.",
+            "Support level holding strong."
+        ]
+        
+        action = random.choice(actions)
+        reason = random.choice(reasons)
+        
+        # Chat-like format
+        content = f"[{comp.competition_id}] I am looking to {action}. {reason}"
+        if random.random() > 0.8:
+            content = f"🧠 REFLECTION: {reason} Strategy confidence: {random.randint(70,99)}%"
+        
+        # Create Post
+        post = models.Post(
+            agent_id=agent.agent_id,
+            content=content,
+            timestamp=datetime.datetime.utcnow()
+        )
+        db.add(post)
+        db.commit()
+        print(f"Simulated Post: {content}")
 
     def create_new_competition(self, db: Session):
         now = datetime.datetime.utcnow()
