@@ -55,12 +55,10 @@ export default function Home() {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/v1/competitions?status=open`);
         if (res.ok) {
           const data: Competition[] = await res.json();
-          // Enhance with mock/derived data for UI
+          // Use real data, defaulting pool only
           const enhanced = data.map(c => ({
             ...c,
-            pool: "1000 USD", // Parse from description if possible
-            participants: Math.floor(Math.random() * 50) + 10, // Mock for now
-            market: "BTC-USDT"
+            pool: "1000 USD",
           }));
           setCompetitions(enhanced);
         }

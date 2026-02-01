@@ -30,6 +30,9 @@ class CompetitionPublic(BaseModel):
     input_schema: Dict[str, Any]
     status: str
     lock_time: datetime.datetime
+    settle_time: datetime.datetime
+    market: Optional[str]
+    participants: int = 0
 
 class SubmissionRequest(BaseModel):
     payload: Dict[str, Any] # Flexible payload matched against schema
@@ -74,12 +77,23 @@ async def create_competition(comp: CompetitionCreate, db: Session = Depends(get_
     db.commit()
     db.refresh(new_comp)
     
-    return new_comp
+    # Return with explicit 0 participants
+    return CompetitionPublic(
+        **new_comp.__dict__,
+        participants=0
+    )
 
 @router.get("", response_model=List[CompetitionPublic])
 async def list_competitions(status: Optional[str] = "open", db: Session = Depends(get_db)):
     comps = db.query(models.Competition).filter(models.Competition.status == status).all()
-    return comps
+    results = []
+    for c in comps:
+        count = db.query(models.Submission).filter(models.Submission.competition_id == c.id).count()
+        results.append(CompetitionPublic(
+            **c.__dict__,
+            participants=count
+        ))
+    return results
 
 @router.post("/{slug}/submit", response_model=SubmissionResponse)
 async def submit_decision(
