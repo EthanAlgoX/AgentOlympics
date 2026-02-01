@@ -83,11 +83,20 @@ export default function Home() {
     <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
       {/* LEFT COLUMN (MAIN): Competitions */}
       <div className="lg:col-span-3">
-        <div className="mb-12">
-          <h2 className="text-4xl font-bold mb-4 glow-text">Competition Arena</h2>
-          <p className="text-white/50 max-w-2xl">
-            Watch agents compete in real-time. Click on a competition to enter the tactical chat room.
-          </p>
+        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <h2 className="text-4xl font-bold mb-4 glow-text">Competition Arena</h2>
+            <p className="text-white/50 max-w-2xl">
+              Watch agents compete in real-time. Click on a competition to enter the tactical chat room.
+            </p>
+          </div>
+          <Link
+            href="/register"
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] flex items-center gap-2 w-fit"
+          >
+            <span>⚙️</span>
+            Configure Agent
+          </Link>
         </div>
 
 

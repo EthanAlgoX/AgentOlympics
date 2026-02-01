@@ -85,3 +85,384 @@ INFO:     127.0.0.1:55503 - "GET /api/social/posts HTTP/1.1" 200 OK
 INFO:     127.0.0.1:55506 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
 INFO:     127.0.0.1:55504 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
 INFO:     127.0.0.1:55503 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55531 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55533 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55535 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55537 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55531 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55545 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55547 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55549 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55551 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55545 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55568 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55570 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55572 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55574 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55568 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55585 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55589 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55587 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55591 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55585 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55599 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55601 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55604 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55605 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55599 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55616 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55614 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55612 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55618 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55612 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55612 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55621 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55623 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55625 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55621 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55621 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55630 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55631 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55634 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55635 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55630 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55630 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55644 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55646 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55648 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55644 - "GET /api/social/stats HTTP/1.1" 200 OK
+2026-02-01 23:21:33,675 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1512 is now LOCKED.
+INFO:     127.0.0.1:55644 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55644 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55650 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55654 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55655 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55657 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55659 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55661 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55650 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55654 - "GET /api/social/?slug=btc_pred_20260201_1512 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55657 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55654 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55654 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55657 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55650 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55654 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55669 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55667 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55666 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55666 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55673 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55674 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55676 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55673 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55678 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55680 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55682 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55678 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55686 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55688 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55690 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55686 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55692 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55694 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55696 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55692 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55703 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55705 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55706 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55703 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55712 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55711 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55709 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55709 - "GET /api/social/stats HTTP/1.1" 200 OK
+2026-02-01 23:22:33,722 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1512. Result: SHORT
+2026-02-01 23:22:33,733 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1512 SETTLED.
+2026-02-01 23:22:38,737 [INFO] app.engine.scheduler: Startup Trigger: Forcing immediate competition.
+2026-02-01 23:22:38,741 [INFO] app.engine.scheduler: New competition created: btc_pred_20260201_1522
+2026-02-01 23:22:43,752 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1522 is now OPEN.
+2026-02-01 23:22:43,764 [INFO] app.engine.scheduler: Agent EthanAgent_1 submitted to btc_pred_20260201_1522
+2026-02-01 23:22:53,777 [INFO] app.engine.scheduler: Agent EthanAgent_2 submitted to btc_pred_20260201_1522
+2026-02-01 23:23:03,793 [INFO] app.engine.scheduler: Agent EthanAgent_3 submitted to btc_pred_20260201_1522
+INFO:     127.0.0.1:55738 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55741 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55740 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55741 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55738 - "GET /api/social/?slug=btc_pred_20260201_1522 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55738 - "GET /api/social/?slug=btc_pred_20260201_1522 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55744 - "GET /api/social/?slug=btc_pred_20260201_1522 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55746 - "GET /api/social/?slug=btc_pred_20260201_1522 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55746 - "GET /api/social/?slug=btc_pred_20260201_1522 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55748 - "GET /api/social/?slug=btc_pred_20260201_1522 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55748 - "GET /api/social/?slug=btc_pred_20260201_1522 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55767 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55769 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55773 - "GET /api/social/?slug=btc_pred_20260201_1522 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55771 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55767 - "GET /api/social/stats HTTP/1.1" 200 OK
+2026-02-01 23:24:28,880 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1522 is now LOCKED.
+2026-02-01 23:24:38,887 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1522. Result: SHORT
+2026-02-01 23:24:38,898 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1522 SETTLED.
+2026-02-01 23:24:43,908 [INFO] app.engine.scheduler: New competition created: btc_pred_20260201_1524
+2026-02-01 23:24:48,918 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1524 is now OPEN.
+2026-02-01 23:24:53,931 [INFO] app.engine.scheduler: Agent EthanAgent_2 submitted to btc_pred_20260201_1524
+2026-02-01 23:24:53,935 [INFO] app.engine.scheduler: Agent EthanAgent_3 submitted to btc_pred_20260201_1524
+INFO:     127.0.0.1:55794 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55796 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55798 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55800 - "GET /api/social/?slug=btc_pred_20260201_1522 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55794 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55798 - "GET /api/social/?slug=btc_pred_20260201_1524 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55798 - "GET /api/social/?slug=btc_pred_20260201_1524 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55803 - "GET /api/social/?slug=btc_pred_20260201_1524 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55805 - "GET /api/social/?slug=btc_pred_20260201_1524 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55805 - "GET /api/social/?slug=btc_pred_20260201_1524 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55807 - "GET /api/social/?slug=btc_pred_20260201_1524 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55807 - "GET /api/social/?slug=btc_pred_20260201_1524 HTTP/1.1" 200 OK
+2026-02-01 23:25:38,989 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1524 is now LOCKED.
+2026-02-01 23:25:43,994 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1524. Result: LONG
+2026-02-01 23:25:44,004 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1524 SETTLED.
+2026-02-01 23:25:49,010 [INFO] app.engine.scheduler: New competition created: btc_pred_20260201_1525
+2026-02-01 23:25:54,018 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1525 is now OPEN.
+2026-02-01 23:25:59,027 [INFO] app.engine.scheduler: Agent EthanAgent_2 submitted to btc_pred_20260201_1525
+INFO:     127.0.0.1:55819 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55821 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55824 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55825 - "GET /api/social/?slug=btc_pred_20260201_1524 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55819 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55824 - "GET /api/social/?slug=btc_pred_20260201_1525 HTTP/1.1" 200 OK
+2026-02-01 23:26:19,058 [INFO] app.engine.scheduler: Agent EthanAgent_1 submitted to btc_pred_20260201_1525
+INFO:     127.0.0.1:55824 - "GET /api/social/?slug=btc_pred_20260201_1525 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55828 - "GET /api/social/?slug=btc_pred_20260201_1525 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55830 - "GET /api/social/?slug=btc_pred_20260201_1525 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55830 - "GET /api/social/?slug=btc_pred_20260201_1525 HTTP/1.1" 200 OK
+2026-02-01 23:26:34,110 [INFO] app.engine.scheduler: Agent EthanAgent_3 submitted to btc_pred_20260201_1525
+INFO:     127.0.0.1:55833 - "GET /api/social/?slug=btc_pred_20260201_1525 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55835 - "GET /api/social/?slug=btc_pred_20260201_1525 HTTP/1.1" 200 OK
+2026-02-01 23:26:44,130 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1525 is now LOCKED.
+2026-02-01 23:26:49,137 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1525. Result: LONG
+2026-02-01 23:26:49,146 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1525 SETTLED.
+2026-02-01 23:26:54,154 [INFO] app.engine.scheduler: New competition created: btc_pred_20260201_1526
+2026-02-01 23:26:59,165 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1526 is now OPEN.
+2026-02-01 23:26:59,172 [INFO] app.engine.scheduler: Agent EthanAgent_1 submitted to btc_pred_20260201_1526
+2026-02-01 23:27:04,181 [INFO] app.engine.scheduler: Agent EthanAgent_2 submitted to btc_pred_20260201_1526
+INFO:     127.0.0.1:55848 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55850 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55852 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55854 - "GET /api/social/?slug=btc_pred_20260201_1525 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55848 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55852 - "GET /api/social/?slug=btc_pred_20260201_1526 HTTP/1.1" 200 OK
+2026-02-01 23:27:19,203 [INFO] app.engine.scheduler: Agent EthanAgent_3 submitted to btc_pred_20260201_1526
+INFO:     127.0.0.1:55852 - "GET /api/social/?slug=btc_pred_20260201_1526 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55857 - "GET /api/social/?slug=btc_pred_20260201_1526 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55859 - "GET /api/social/?slug=btc_pred_20260201_1526 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55859 - "GET /api/social/?slug=btc_pred_20260201_1526 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55862 - "GET /api/social/?slug=btc_pred_20260201_1526 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55862 - "GET /api/social/?slug=btc_pred_20260201_1526 HTTP/1.1" 200 OK
+2026-02-01 23:27:49,259 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1526 is now LOCKED.
+2026-02-01 23:27:54,266 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1526. Result: LONG
+2026-02-01 23:27:54,276 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1526 SETTLED.
+2026-02-01 23:27:59,284 [INFO] app.engine.scheduler: New competition created: btc_pred_20260201_1527
+2026-02-01 23:28:04,291 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1527 is now OPEN.
+2026-02-01 23:28:04,295 [INFO] app.engine.scheduler: Agent EthanAgent_3 submitted to btc_pred_20260201_1527
+2026-02-01 23:28:14,309 [INFO] app.engine.scheduler: Agent EthanAgent_1 submitted to btc_pred_20260201_1527
+2026-02-01 23:28:14,314 [INFO] app.engine.scheduler: Agent EthanAgent_2 submitted to btc_pred_20260201_1527
+INFO:     127.0.0.1:55877 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55879 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55882 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55883 - "GET /api/social/?slug=btc_pred_20260201_1526 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55877 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55882 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55882 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55886 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55888 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55888 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55894 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55896 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55904 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55908 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55909 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55910 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55904 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55912 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55912 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55916 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55917 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55912 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55912 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55926 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55925 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55922 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55928 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55925 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55931 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55931 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55933 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55935 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55931 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55931 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55938 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55938 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55942 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55941 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55942 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55942 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55949 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55950 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55952 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55954 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55950 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55959 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55959 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55964 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55965 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55959 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55959 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55967 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55967 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55972 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55973 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55967 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55967 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55978 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55981 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55983 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55984 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55981 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55986 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55986 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55990 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55989 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55986 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55986 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55995 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55995 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55998 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56000 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55995 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55995 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56006 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56009 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56010 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56012 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56009 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56015 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56015 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56017 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56019 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56015 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56015 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56024 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56024 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56026 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56028 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56024 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56024 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56031 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56034 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56035 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56037 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56034 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56040 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56040 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56043 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56044 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56040 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56040 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56046 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56046 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56048 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56050 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56046 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56046 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+2026-02-01 23:30:44,503 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1527 is now LOCKED.
+2026-02-01 23:30:59,516 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1527. Result: LONG
+2026-02-01 23:30:59,525 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1527 SETTLED.
+2026-02-01 23:31:04,531 [INFO] app.engine.scheduler: New competition created: btc_pred_20260201_1531
+2026-02-01 23:31:09,539 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1531 is now OPEN.
+2026-02-01 23:31:09,545 [INFO] app.engine.scheduler: Agent EthanAgent_3 submitted to btc_pred_20260201_1531
+INFO:     127.0.0.1:56087 - "GET /api/social/?slug=btc_pred_20260201_1527 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56090 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56091 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56093 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56090 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56093 - "GET /api/social/?slug=btc_pred_20260201_1531 HTTP/1.1" 200 OK
+2026-02-01 23:31:19,556 [INFO] app.engine.scheduler: Agent EthanAgent_2 submitted to btc_pred_20260201_1531
+INFO:     127.0.0.1:56093 - "GET /api/social/?slug=btc_pred_20260201_1531 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56116 - "GET /api/social/?slug=btc_pred_20260201_1531 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56127 - "GET /api/social/?slug=btc_pred_20260201_1531 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56127 - "GET /api/social/?slug=btc_pred_20260201_1531 HTTP/1.1" 200 OK
+2026-02-01 23:31:29,570 [INFO] app.engine.scheduler: Agent EthanAgent_1 submitted to btc_pred_20260201_1531
+INFO:     127.0.0.1:56135 - "GET /api/social/?slug=btc_pred_20260201_1531 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56135 - "GET /api/social/?slug=btc_pred_20260201_1531 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56153 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56155 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56158 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56159 - "GET /api/social/?slug=btc_pred_20260201_1531 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56153 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56168 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56170 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56173 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56174 - "GET /api/social/?slug=btc_pred_20260201_1531 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56168 - "GET /api/social/stats HTTP/1.1" 200 OK
+2026-02-01 23:33:49,716 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1531 is now LOCKED.
+2026-02-01 23:34:04,728 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1531. Result: SHORT
+2026-02-01 23:34:04,737 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1531 SETTLED.
+2026-02-01 23:34:09,743 [INFO] app.engine.scheduler: New competition created: btc_pred_20260201_1534
+2026-02-01 23:34:14,749 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1534 is now OPEN.
+INFO:     127.0.0.1:56184 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56186 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56189 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56190 - "GET /api/social/?slug=btc_pred_20260201_1531 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56184 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56189 - "GET /api/social/?slug=btc_pred_20260201_1534 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56189 - "GET /api/social/?slug=btc_pred_20260201_1534 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56192 - "GET /api/social/?slug=btc_pred_20260201_1534 HTTP/1.1" 200 OK
+2026-02-01 23:34:24,764 [INFO] app.engine.scheduler: Agent EthanAgent_3 submitted to btc_pred_20260201_1534
+INFO:     127.0.0.1:56195 - "GET /api/social/?slug=btc_pred_20260201_1534 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56195 - "GET /api/social/?slug=btc_pred_20260201_1534 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56197 - "GET /api/social/?slug=btc_pred_20260201_1534 HTTP/1.1" 200 OK
+2026-02-01 23:34:34,777 [INFO] app.engine.scheduler: Agent EthanAgent_2 submitted to btc_pred_20260201_1534
+INFO:     127.0.0.1:56197 - "GET /api/social/?slug=btc_pred_20260201_1534 HTTP/1.1" 200 OK
+2026-02-01 23:35:14,821 [INFO] app.engine.scheduler: Agent EthanAgent_1 submitted to btc_pred_20260201_1534
+INFO:     127.0.0.1:56204 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56206 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56209 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56210 - "GET /api/social/?slug=btc_pred_20260201_1534 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56204 - "GET /api/social/stats HTTP/1.1" 200 OK
+2026-02-01 23:35:59,874 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1534 is now LOCKED.
+2026-02-01 23:36:09,882 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1534. Result: LONG
+2026-02-01 23:36:09,888 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1534 SETTLED.
+2026-02-01 23:36:14,895 [INFO] app.engine.scheduler: New competition created: btc_pred_20260201_1536
+INFO:     127.0.0.1:56219 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56222 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56223 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56225 - "GET /api/social/?slug=btc_pred_20260201_1534 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56219 - "GET /api/social/stats HTTP/1.1" 200 OK
+2026-02-01 23:36:19,902 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1536 is now OPEN.
+2026-02-01 23:36:19,906 [INFO] app.engine.scheduler: Agent EthanAgent_1 submitted to btc_pred_20260201_1536
+2026-02-01 23:36:24,918 [INFO] app.engine.scheduler: Agent EthanAgent_2 submitted to btc_pred_20260201_1536
+2026-02-01 23:36:59,959 [INFO] app.engine.scheduler: Agent EthanAgent_3 submitted to btc_pred_20260201_1536
+INFO:     127.0.0.1:56241 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56243 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56245 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56241 - "GET /api/social/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56245 - "GET /api/social/?slug=btc_pred_20260201_1536 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56245 - "GET /api/social/?slug=btc_pred_20260201_1536 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56248 - "GET /api/social/?slug=btc_pred_20260201_1536 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56251 - "GET /api/social/?slug=btc_pred_20260201_1536 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56251 - "GET /api/social/?slug=btc_pred_20260201_1536 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56253 - "GET /api/social/?slug=btc_pred_20260201_1536 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56253 - "GET /api/social/?slug=btc_pred_20260201_1536 HTTP/1.1" 200 OK
+2026-02-01 23:38:05,033 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1536 is now LOCKED.
+2026-02-01 23:38:15,042 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1536. Result: LONG
+2026-02-01 23:38:15,049 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1536 SETTLED.
+INFO:     127.0.0.1:56263 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56265 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56267 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56269 - "GET /api/social/?slug=btc_pred_20260201_1536 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56263 - "GET /api/social/stats HTTP/1.1" 200 OK
+2026-02-01 23:38:20,056 [INFO] app.engine.scheduler: New competition created: btc_pred_20260201_1538
+2026-02-01 23:38:25,063 [INFO] app.engine.scheduler: Competition btc_pred_20260201_1538 is now OPEN.
+2026-02-01 23:38:25,068 [INFO] app.engine.scheduler: Agent EthanAgent_3 submitted to btc_pred_20260201_1538
+2026-02-01 23:38:55,105 [INFO] app.engine.scheduler: Agent EthanAgent_2 submitted to btc_pred_20260201_1538
