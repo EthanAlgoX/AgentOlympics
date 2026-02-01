@@ -6,6 +6,9 @@ from app.db import models
 from app.db.ledger import add_ledger_entry, get_agent_balance
 from app.engine.adversarial import AdversarialEngine
 import random
+import logging
+
+logger = logging.getLogger(__name__)
 
 class CompetitionScheduler:
     def __init__(self):
@@ -13,13 +16,13 @@ class CompetitionScheduler:
         self.startup_trigger = True # Flag to force start on boot
     
     async def run_forever(self):
-        print("Competition Scheduler started.")
+        logger.info("Competition Scheduler started.")
         while True:
             db = SessionLocal()
             try:
                 self.manage_lifecycles(db)
             except Exception as e:
-                print(f"Scheduler Error: {e}")
+                logger.error(f"Scheduler Error: {e}")
             finally:
                 db.close()
             await asyncio.sleep(5) # Check every 5 seconds for liveliness
@@ -38,7 +41,7 @@ class CompetitionScheduler:
             if self.startup_trigger:
                 should_create = True
                 self.startup_trigger = False
-                print("Startup Trigger: Forcing immediate competition.")
+                logger.info("Startup Trigger: Forcing immediate competition.")
             else:
                 last_comp = db.query(models.Competition).order_by(models.Competition.start_time.desc()).first()
                 if not last_comp:
@@ -59,7 +62,7 @@ class CompetitionScheduler:
             if now >= comp.start_time:
                 comp.status = "open"
                 db.commit()
-                print(f"Competition {comp.slug} is now OPEN.")
+                logger.info(f"Competition {comp.slug} is now OPEN.")
 
         # 3. Transition open -> locked
         # (Lock time reached)
@@ -68,7 +71,7 @@ class CompetitionScheduler:
             if now >= comp.lock_time:
                 comp.status = "locked"
                 db.commit()
-                print(f"Competition {comp.slug} is now LOCKED.")
+                logger.info(f"Competition {comp.slug} is now LOCKED.")
 
         # 4. Transition locked -> settled
         # (Settle time reached)
@@ -85,7 +88,7 @@ class CompetitionScheduler:
                 
                 comp.status = "settled"
                 db.commit()
-                print(f"Competition {comp.slug} SETTLED.")
+                logger.info(f"Competition {comp.slug} SETTLED.")
         
         # 5. Simulate Live Agent Activity
         self.simulate_live_activity(db)
@@ -177,7 +180,7 @@ class CompetitionScheduler:
         )
         db.add(new_comp)
         db.commit()
-        print(f"New competition created: {slug}")
+        logger.info(f"New competition created: {slug}")
 
     def schedule_adversarial_duel(self, db: Session):
         # Placeholder / Deprecated for now until Adversarial Engine updated

@@ -11,7 +11,15 @@ app = FastAPI(title="AgentOlympics · Trade API") # Moved instantiation down
 
 from contextlib import asynccontextmanager
 import asyncio
+import logging
 from app.engine.scheduler import CompetitionScheduler
+
+# Configure Logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+)
+logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -20,16 +28,17 @@ async def lifespan(app: FastAPI):
         masked_url = str(DATABASE_URL)
         if "://" in masked_url:
             masked_url = masked_url.split("://")[0] + "://...@" + masked_url.split("@")[-1] if "@" in masked_url else masked_url[:15] + "..."
-        print(f"DB Config: {masked_url}")
+        logger.info(f"DB Config: {masked_url}")
         
         with engine.connect() as connection:
-            print("DB connected")
+            logger.info("DB connected")
     except Exception as e:
-        print(f"DB Connection FAILED: {e}")
+        logger.error(f"DB Connection FAILED: {e}")
 
     # 2. Start Scheduler
     scheduler = CompetitionScheduler()
     asyncio.create_task(scheduler.run_forever())
+    logger.info("Competition Scheduler task initiated")
     
     yield
     # Shutdown logic if needed
