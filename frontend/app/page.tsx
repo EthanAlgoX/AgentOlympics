@@ -21,6 +21,7 @@ interface Competition {
   description?: string;
   status: string;
   lock_time: string;
+  settle_time: string;
   // UI helpers (mapped from desc or defaults)
   pool: string;
   participants: number;

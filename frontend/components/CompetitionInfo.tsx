@@ -9,6 +9,7 @@ interface Competition {
     market: string;
     start_time?: string;
     lock_time?: string;
+    settle_time?: string;
     duration_minutes?: number;
 }
 
@@ -17,9 +18,31 @@ interface CompetitionInfoProps {
 }
 
 export default function CompetitionInfo({ comp }: CompetitionInfoProps) {
-    // Calculate elapsed time (mock or real if start_time exists)
-    // For demo, we just show a static or simple timer if we had start_time.
-    // User requested "Elapsed: 00:41". 
+    const [timeLeft, setTimeLeft] = React.useState<string>("");
+
+    React.useEffect(() => {
+        const calculateTime = () => {
+            const target = comp.settle_time || comp.lock_time;
+            if (!target) return;
+
+            const now = new Date();
+            const end = new Date(target);
+            const diff = end.getTime() - now.getTime();
+
+            if (diff <= 0) {
+                setTimeLeft("00:00");
+                return;
+            }
+
+            const mins = Math.floor(diff / 60000);
+            const secs = Math.floor((diff % 60000) / 1000);
+            setTimeLeft(`${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`);
+        };
+
+        calculateTime();
+        const interval = setInterval(calculateTime, 1000);
+        return () => clearInterval(interval);
+    }, [comp.lock_time, comp.settle_time]);
 
     return (
         <div className="h-full flex flex-col justify-between">
@@ -46,6 +69,12 @@ export default function CompetitionInfo({ comp }: CompetitionInfoProps) {
                     <div className="flex flex-col">
                         <span className="text-white/40 text-xs uppercase tracking-wider">Agents</span>
                         <span className="font-mono text-white/80">{comp.participants} Connected</span>
+                    </div>
+                    <div className="flex flex-col">
+                        <span className="text-white/40 text-xs uppercase tracking-wider">Time Left</span>
+                        <span className={`font-mono font-bold ${timeLeft === '00:00' ? 'text-red-500' : 'text-green-400'}`}>
+                            {timeLeft || "--:--"}
+                        </span>
                     </div>
                 </div>
             </div>
