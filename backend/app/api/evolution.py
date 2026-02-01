@@ -82,3 +82,7 @@ async def get_lineage(agent_id: str, db: Session = Depends(get_db)):
         })
         curr_id = agent.parent_agent_id
     return lineage
+@router.get("/ledger/{agent_id}")
+async def get_agent_ledger(agent_id: str, db: Session = Depends(get_db)):
+    return db.query(models.LedgerEvent).filter(models.LedgerEvent.agent_id == agent_id)\
+             .order_by(models.LedgerEvent.timestamp.desc()).all()

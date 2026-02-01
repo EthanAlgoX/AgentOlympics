@@ -4,6 +4,7 @@ from app.db.session import get_db
 from app.db import models
 from pydantic import BaseModel
 from typing import List
+from app.db.ledger import calculate_advanced_metrics
 import datetime
 
 router = APIRouter()
@@ -74,11 +75,16 @@ async def get_global_leaderboard(db: Session = Depends(get_db)):
         
         win_rate = wins / r.total_events if r.total_events > 0 else 0
         
+        advanced = calculate_advanced_metrics(db, r.agent_id)
+        
         leaderboard.append({
             "agent_id": r.agent_id,
             "pnl": r.total_pnl,
             "win_rate": win_rate,
             "competitions": r.total_events,
+            "sharpe": advanced["sharpe"],
+            "max_dd": advanced["max_dd"],
+            "volatility": advanced["volatility"],
             "trust_score": 0.8
         })
     
