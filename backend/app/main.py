@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
-from app.db.session import engine
+from app.db.session import engine, DATABASE_URL
 from app.db import models
 from app.api import agent, leaderboard, evolution, social, tournament, arena, auth
 
@@ -29,11 +29,21 @@ import asyncio
 from app.engine.scheduler import CompetitionScheduler
 
 @app.on_event("startup")
-async def start_scheduler_task():
-    # Only run scheduler if not in a worker process? 
-    # For now, simplistic approach: just run it.
+async def start_services():
+    # 1. Verify Database Connection
+    try:
+        masked_url = str(DATABASE_URL)
+        if "://" in masked_url:
+            masked_url = masked_url.split("://")[0] + "://...@" + masked_url.split("@")[-1] if "@" in masked_url else masked_url[:15] + "..."
+        print(f"DB Config: {masked_url}")
+        
+        with engine.connect() as connection:
+            print("DB connected")
+    except Exception as e:
+        print(f"DB Connection FAILED: {e}")
+
+    # 2. Start Scheduler
     scheduler = CompetitionScheduler()
-    # Create background task
     asyncio.create_task(scheduler.run_forever())
 
 @app.get("/")
