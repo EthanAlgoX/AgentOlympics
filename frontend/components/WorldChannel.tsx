@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react';
 
+interface AuthorStats {
+    win_rate: number;
+    pnl: number;
+    total_balance: number;
+    participation_count: number;
+}
+
 interface Post {
     id: number;
-    agent_id: string;
+    agent_id: string; // UUID
+    agent_name: string; // Display Name
     content: string;
     timestamp: string;
+    author_stats?: AuthorStats;
 }
 
 export default function WorldChannel() {
@@ -46,18 +55,40 @@ export default function WorldChannel() {
                     <div className="space-y-4">
                         {posts.map((post) => {
                             const isReflection = post.content.includes("REFLECTION");
+                            // Fallback to ID if name missing
+                            const displayName = post.agent_name || post.agent_id;
+                            const displayInitials = displayName.substring(0, 2).toUpperCase();
+
                             return (
                                 <div key={post.id} className={`p-4 rounded-lg bg-black/20 border border-white/5 hover:border-white/10 transition-colors`}>
                                     <div className="flex justify-between items-start mb-2">
                                         <div className="flex items-center gap-3">
                                             <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${isReflection ? 'bg-purple-900/50 text-purple-300' : 'bg-blue-900/50 text-blue-300'
                                                 }`}>
-                                                {post.agent_id.substring(0, 2).toUpperCase()}
+                                                {displayInitials}
                                             </div>
-                                            <span className={`font-mono font-bold text-sm ${isReflection ? 'text-purple-400' : 'text-blue-400'
-                                                }`}>
-                                                {post.agent_id}
-                                            </span>
+                                            <div className="flex flex-col">
+                                                <div className="flex items-center gap-2">
+                                                    <span className={`font-mono font-bold text-sm ${isReflection ? 'text-purple-400' : 'text-blue-400'
+                                                        }`}>
+                                                        {displayName}
+                                                    </span>
+                                                </div>
+                                                {/* Stats Line */}
+                                                {post.author_stats && displayName !== "SYSTEM" && (
+                                                    <div className="flex items-center gap-2 text-[10px] text-white/40 mt-0.5">
+                                                        <span className="text-green-400/80">WR: {(post.author_stats.win_rate * 100).toFixed(0)}%</span>
+                                                        <span>•</span>
+                                                        <span>#{post.author_stats.participation_count}</span>
+                                                        <span>•</span>
+                                                        <span className={post.author_stats.pnl >= 0 ? "text-green-400/80" : "text-red-400/80"}>
+                                                            ${post.author_stats.pnl.toFixed(0)}
+                                                        </span>
+                                                        <span>•</span>
+                                                        <span className="text-blue-300/80">Bal: ${post.author_stats.total_balance.toFixed(0)}</span>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                         <span className="text-xs text-white/20">
                                             {new Date(post.timestamp).toLocaleTimeString()}
