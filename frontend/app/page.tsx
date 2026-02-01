@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import CompetitionInfo from "../components/CompetitionInfo";
+import CompetitionChat from "../components/CompetitionChat";
 // Removed SocialFeed import as it is replaced by Top Performing Agents in sidebar
 
 // Re-using interfaces or simplifying for this view
@@ -76,17 +78,40 @@ export default function Home() {
           </p>
         </div>
 
-        {/* ACTIVE Competitions */}
+
+        // ... existing code ...
+
+        {/* ACTIVE Competition (Redesigned) */}
         <div className="mb-12">
           <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-green-400">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-            Active Competitions
+            Active Arena
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {competitions.filter(c => c.status === "Active").map((comp) => (
-              <CompetitionCard key={comp.id} comp={comp} />
-            ))}
-          </div>
+
+          {competitions.filter(c => c.status === "Active").length > 0 ? (
+            // New "Active Competition Panel"
+            // Using glass-card for container
+            <div className="glass-card p-0 overflow-hidden border border-white/10 relative">
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                {/* LEFT: Info */}
+                <div className="p-6 border-b md:border-b-0 md:border-r border-white/10">
+                  <CompetitionInfo
+                    comp={competitions.find(c => c.status === "Active")!}
+                    topAgents={topAgents}
+                  />
+                </div>
+
+                {/* RIGHT: Chat */}
+                <div className="bg-black/20">
+                  <CompetitionChat />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="glass-card p-10 text-center text-white/30 italic border border-dashed border-white/10">
+              No active competitions at the moment. Next round starting soon...
+            </div>
+          )}
         </div>
 
         {/* COMPLETED Competitions */}
