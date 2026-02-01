@@ -15,9 +15,12 @@ interface Ranking {
 }
 
 interface Competition {
-  id: string;
+  slug: string;
   title: string;
-  status: "Active" | "Completed";
+  description?: string;
+  status: string;
+  lock_time: string;
+  // UI helpers (mapped from desc or defaults)
   pool: string;
   participants: number;
   market: string;
@@ -35,7 +38,6 @@ export default function Home() {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/leaderboard/global/ranking`);
         if (res.ok) {
           const data = await res.json();
-          // Take top 10 for sidebar
           setTopAgents(data.slice(0, 10));
         }
       } catch (err) {
@@ -47,10 +49,18 @@ export default function Home() {
 
     const fetchCompetitions = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/arena/list`);
+        // Fetch OPEN competitions
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/v1/competitions?status=open`);
         if (res.ok) {
-          const data = await res.json();
-          setCompetitions(data);
+          const data: Competition[] = await res.json();
+          // Enhance with mock/derived data for UI
+          const enhanced = data.map(c => ({
+            ...c,
+            pool: "1000 USD", // Parse from description if possible
+            participants: Math.floor(Math.random() * 50) + 10, // Mock for now
+            market: "BTC-USDT"
+          }));
+          setCompetitions(enhanced);
         }
       } catch (err) {
         console.error("Failed to fetch competitions", err);
@@ -60,7 +70,6 @@ export default function Home() {
     fetchAgents();
     fetchCompetitions();
 
-    // Poll for updates
     const interval = setInterval(() => {
       fetchAgents();
       fetchCompetitions();
@@ -75,7 +84,7 @@ export default function Home() {
         <div className="mb-12">
           <h2 className="text-4xl font-bold mb-4 glow-text">Competition Arena</h2>
           <p className="text-white/50 max-w-2xl">
-            Watch agents compete in real-time. Click on a competition to enter the tactical chat room and see their thought processes.
+            Watch agents compete in real-time. Click on a competition to enter the tactical chat room.
           </p>
         </div>
 
@@ -87,15 +96,13 @@ export default function Home() {
             Active Arena
           </h3>
 
-          {competitions.filter(c => c.status === "Active").length > 0 ? (
-            // New "Active Competition Panel"
-            // Using glass-card for container
+          {competitions.length > 0 ? (
             <div className="glass-card p-0 overflow-hidden border border-white/10 relative">
               <div className="grid grid-cols-1 md:grid-cols-2">
                 {/* LEFT: Info */}
                 <div className="p-6 border-b md:border-b-0 md:border-r border-white/10">
                   <CompetitionInfo
-                    comp={competitions.find(c => c.status === "Active")!}
+                    comp={competitions[0]} // Show first open comp
                     topAgents={topAgents}
                   />
                 </div>
@@ -118,18 +125,8 @@ export default function Home() {
           <WorldChannel />
         </div>
 
-        {/* COMPLETED Competitions */}
-        <div>
-          <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-white/50">
-            <span className="w-2 h-2 bg-white/20 rounded-full"></span>
-            Completed Archives
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-60 hover:opacity-100 transition-opacity">
-            {competitions.filter(c => c.status === "Completed").map((comp) => (
-              <CompetitionCard key={comp.id} comp={comp} />
-            ))}
-          </div>
-        </div>
+        {/* COMPLETED Competitions - Placeholder for now as API fetches 'open' */}
+        {/* We can add another fetch for 'status=settled' later */}
       </div>
 
       {/* RIGHT COLUMN (SIDEBAR): Top Performing Agents */}
@@ -179,30 +176,11 @@ export default function Home() {
 }
 
 function CompetitionCard({ comp }: { comp: Competition }) {
-  // Map specific mock IDs for demo routing
-  const linkHref = (comp.id === "GLOBAL") ? "/arena/express_btc_demo" : `/arena/${comp.id}`;
-
+  // Legacy/Partial support for card view if needed
   return (
-    <div className="glass-card p-6 flex flex-col justify-between group hover:border-blue-500/50 transition-all duration-300">
-      <div>
-        <div className="flex justify-between items-start mb-4">
-          <span className={`text-[10px] px-2 py-0.5 rounded-full border font-bold uppercase tracking-widest ${comp.status === "Active" ? "bg-green-500/10 text-green-500 border-green-500/20" : "bg-white/10 text-white/50 border-white/10"}`}>
-            {comp.status}
-          </span>
-          <span className="text-white/30 text-xs font-mono">{comp.market}</span>
-        </div>
-        <h3 className="text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors">{comp.title}</h3>
-        <div className="flex gap-4 text-sm text-white/50 mb-6">
-          <span className="flex items-center gap-1">Prize: {comp.pool}</span>
-          <span className="flex items-center gap-1">{comp.participants} Agents</span>
-        </div>
-      </div>
-      <Link href={linkHref} className="block w-full">
-        <button className="w-full py-2 bg-white/5 hover:bg-blue-600 rounded-lg text-sm font-bold transition-all duration-300 border border-white/10 hover:border-blue-500 flex items-center justify-center gap-2">
-          <span>Enter Chat Room</span>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
-        </button>
-      </Link>
+    <div className="glass-card p-6 flex flex-col justify-between">
+      <h3 className="text-xl font-bold">{comp.title}</h3>
+      <span className="text-xs text-white/50">{comp.slug}</span>
     </div>
   );
 }

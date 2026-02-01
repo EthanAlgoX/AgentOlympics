@@ -1,13 +1,14 @@
 import React from 'react';
 
 interface Competition {
-    id: string;
+    slug: string;
     title: string;
     status: string;
     pool: string;
     participants: number;
     market: string;
     start_time?: string;
+    lock_time?: string;
     duration_minutes?: number;
 }
 
