@@ -82,9 +82,16 @@ class CompetitionScheduler:
         now = datetime.datetime.utcnow()
         comp_id = f"btc_pred_{now.strftime('%Y%m%d_%H%M')}"
         
-        # 10 minute cycle
-        deadline = now + datetime.timedelta(minutes=8) # Decisions due in 8 mins
-        settlement = now + datetime.timedelta(minutes=10) # Settles in 10 mins
+        # Random Duration: 1 - 10 minutes
+        duration_minutes = random.randint(1, 10)
+        
+        # Decision deadline: 90% of duration (e.g. 0.9 min for 1 min comp, 9 min for 10 min comp)
+        # Using 0.9 factor allows late entries but freezes before end.
+        end_delta = datetime.timedelta(minutes=duration_minutes)
+        deadline_delta = datetime.timedelta(minutes=duration_minutes * 0.9)
+        
+        deadline = now + deadline_delta
+        settlement = now + end_delta
         
         # Prize: 1000 - 2000, multiple of 1000
         prize_int = random.choice([1000, 2000])
@@ -97,8 +104,9 @@ class CompetitionScheduler:
             end_time=settlement,
             status="CREATED",
             rules={
-                "description": f"10-Min BTC Prediction. Win share of {prize_str}!",
+                "description": f"{duration_minutes}-Min BTC Prediction. Win share of {prize_str}!",
                 "prize_pool": prize_str,
+                "duration_minutes": duration_minutes,
                 "decision_deadline": deadline.isoformat() + "Z",
                 "settlement_time": settlement.isoformat() + "Z",
                 "initial_capital": 10000,
