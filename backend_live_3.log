@@ -1,0 +1,69 @@
+INFO:     Started server process [51215]
+INFO:     Waiting for application startup.
+2026-02-01 22:37:03,446 [INFO] __main__: DB Config: sqlite:////User...
+2026-02-01 22:37:03,446 [INFO] __main__: DB connected
+2026-02-01 22:37:03,446 [INFO] __main__: Competition Scheduler task initiated
+2026-02-01 22:37:03,446 [INFO] app.engine.scheduler: Competition Scheduler started.
+2026-02-01 22:37:03,458 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1435. Result: LONG
+2026-02-01 22:37:03,462 [ERROR] app.engine.scheduler: Scheduler Error: (sqlite3.ProgrammingError) Error binding parameter 3: type 'UUID' is not supported
+[SQL: INSERT INTO ledger_events (agent_id, competition_id_uuid, competition_id, event_type, amount, balance_after, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id]
+[parameters: ('470679f8-6ae9-45b4-8d6f-c454880a42ff', None, UUID('72552572-d8f1-43b4-9d7b-f2a77dbf00cf'), 'SETTLE', 64.0, 64.0, '2026-02-01 14:37:03.462408')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:51698 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51699 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51700 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+2026-02-01 22:37:08,466 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1435. Result: SHORT
+2026-02-01 22:37:08,470 [ERROR] app.engine.scheduler: Scheduler Error: (sqlite3.ProgrammingError) Error binding parameter 3: type 'UUID' is not supported
+[SQL: INSERT INTO ledger_events (agent_id, competition_id_uuid, competition_id, event_type, amount, balance_after, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id]
+[parameters: ('470679f8-6ae9-45b4-8d6f-c454880a42ff', None, UUID('72552572-d8f1-43b4-9d7b-f2a77dbf00cf'), 'SETTLE', -64.0, -64.0, '2026-02-01 14:37:08.469444')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     127.0.0.1:51715 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51716 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51718 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+2026-02-01 22:37:13,473 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1435. Result: LONG
+2026-02-01 22:37:13,477 [ERROR] app.engine.scheduler: Scheduler Error: (sqlite3.ProgrammingError) Error binding parameter 3: type 'UUID' is not supported
+[SQL: INSERT INTO ledger_events (agent_id, competition_id_uuid, competition_id, event_type, amount, balance_after, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id]
+[parameters: ('470679f8-6ae9-45b4-8d6f-c454880a42ff', None, UUID('72552572-d8f1-43b4-9d7b-f2a77dbf00cf'), 'SETTLE', 64.0, 64.0, '2026-02-01 14:37:13.476418')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     127.0.0.1:51723 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51721 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51725 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+2026-02-01 22:37:18,482 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1435. Result: LONG
+2026-02-01 22:37:18,486 [ERROR] app.engine.scheduler: Scheduler Error: (sqlite3.ProgrammingError) Error binding parameter 3: type 'UUID' is not supported
+[SQL: INSERT INTO ledger_events (agent_id, competition_id_uuid, competition_id, event_type, amount, balance_after, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id]
+[parameters: ('470679f8-6ae9-45b4-8d6f-c454880a42ff', None, UUID('72552572-d8f1-43b4-9d7b-f2a77dbf00cf'), 'SETTLE', 64.0, 64.0, '2026-02-01 14:37:18.486429')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     127.0.0.1:51731 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51729 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51733 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+2026-02-01 22:37:23,490 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1435. Result: LONG
+2026-02-01 22:37:23,494 [ERROR] app.engine.scheduler: Scheduler Error: (sqlite3.ProgrammingError) Error binding parameter 3: type 'UUID' is not supported
+[SQL: INSERT INTO ledger_events (agent_id, competition_id_uuid, competition_id, event_type, amount, balance_after, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id]
+[parameters: ('470679f8-6ae9-45b4-8d6f-c454880a42ff', None, UUID('72552572-d8f1-43b4-9d7b-f2a77dbf00cf'), 'SETTLE', 64.0, 64.0, '2026-02-01 14:37:23.493543')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     127.0.0.1:51743 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51741 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51745 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+2026-02-01 22:37:28,497 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1435. Result: LONG
+2026-02-01 22:37:28,501 [ERROR] app.engine.scheduler: Scheduler Error: (sqlite3.ProgrammingError) Error binding parameter 3: type 'UUID' is not supported
+[SQL: INSERT INTO ledger_events (agent_id, competition_id_uuid, competition_id, event_type, amount, balance_after, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id]
+[parameters: ('470679f8-6ae9-45b4-8d6f-c454880a42ff', None, UUID('72552572-d8f1-43b4-9d7b-f2a77dbf00cf'), 'SETTLE', 64.0, 64.0, '2026-02-01 14:37:28.500793')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     127.0.0.1:51749 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51747 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51751 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+2026-02-01 22:37:33,504 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1435. Result: LONG
+2026-02-01 22:37:33,507 [ERROR] app.engine.scheduler: Scheduler Error: (sqlite3.ProgrammingError) Error binding parameter 3: type 'UUID' is not supported
+[SQL: INSERT INTO ledger_events (agent_id, competition_id_uuid, competition_id, event_type, amount, balance_after, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id]
+[parameters: ('470679f8-6ae9-45b4-8d6f-c454880a42ff', None, UUID('72552572-d8f1-43b4-9d7b-f2a77dbf00cf'), 'SETTLE', 64.0, 64.0, '2026-02-01 14:37:33.506892')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     127.0.0.1:51758 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51756 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51760 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+2026-02-01 22:37:38,511 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1435. Result: SHORT
+2026-02-01 22:37:38,516 [ERROR] app.engine.scheduler: Scheduler Error: (sqlite3.ProgrammingError) Error binding parameter 3: type 'UUID' is not supported
+[SQL: INSERT INTO ledger_events (agent_id, competition_id_uuid, competition_id, event_type, amount, balance_after, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id]
+[parameters: ('470679f8-6ae9-45b4-8d6f-c454880a42ff', None, UUID('72552572-d8f1-43b4-9d7b-f2a77dbf00cf'), 'SETTLE', -64.0, -64.0, '2026-02-01 14:37:38.515529')]
+(Background on this error at: https://sqlalche.me/e/20/f405)

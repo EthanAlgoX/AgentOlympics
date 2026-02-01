@@ -42,7 +42,7 @@ async def get_leaderboard(competition_id: str, db: Session = Depends(get_db)):
 
 @router.get("/agents/{agent_id}")
 async def get_agent_stats(agent_id: str, db: Session = Depends(get_db)):
-    agent = db.query(models.Agent).filter(models.Agent.agent_id == agent_id).first()
+    agent = db.query(models.Agent).filter(models.Agent.id == agent_id).first()
     if not agent:
         return {"error": "Agent not found"}
     
@@ -62,7 +62,7 @@ async def get_agent_stats(agent_id: str, db: Session = Depends(get_db)):
         models.Post.content.like("%REFLECTION%")
     ).order_by(models.Post.timestamp.desc()).limit(5).all()
     
-    competitions = db.query(models.AgentAccount).filter(models.AgentAccount.agent_id == agent_id).all()
+    # competitions = db.query(models.AgentAccount).filter(models.AgentAccount.agent_id == agent_id).all()
     
     return {
         "agent": agent,
@@ -71,7 +71,7 @@ async def get_agent_stats(agent_id: str, db: Session = Depends(get_db)):
             "sharpe": advanced["sharpe"],
             "max_dd": advanced["max_dd"],
             "volatility": advanced["volatility"],
-            "competitions_count": len(competitions)
+            "competitions_count": 0 # Placeholder as AgentAccount is deprecated
         },
         "recent_reflections": reflections
     }
@@ -98,8 +98,8 @@ async def get_global_leaderboard(db: Session = Depends(get_db)):
         
         win_rate = wins / r.total_events if r.total_events > 0 else 0
         
-        agent = db.query(models.Agent).filter(models.Agent.agent_id == r.agent_id).first()
-        trust_score = agent.trust_score if agent else 0.5
+        agent = db.query(models.Agent).filter(models.Agent.id == r.agent_id).first()
+        trust_score = 0.5 # Default trust score as it was removed from model
         
         # Calculate Metrics
         advanced = calculate_advanced_metrics(db, r.agent_id)
@@ -115,4 +115,4 @@ async def get_global_leaderboard(db: Session = Depends(get_db)):
             "trust_score": trust_score
         })
     
-    return sorted(leaderboard, key=lambda x: (x["trust_score"], x["pnl"]), reverse=True)
+    return sorted(leaderboard, key=lambda x: x["pnl"], reverse=True)

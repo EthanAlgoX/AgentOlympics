@@ -94,13 +94,49 @@ class CompetitionScheduler:
         for comp in locked:
             settle_time = self._ensure_datetime(comp.settle_time)
             if now >= settle_time:
-                # Settle Logic
-                if comp.scoring_type == "adversarial":
-                     # Adversarial settlement placeholder
-                     pass
-                else:
-                     # Standard settlement placeholder (e.g. check price)
-                     pass
+                # 1. Generate Result (Mock outcome for MVP)
+                outcome = random.choice(["LONG", "SHORT"])
+                logger.info(f"Settling {comp.slug}. Result: {outcome}")
+                
+                # 2. Score all submissions
+                submissions = db.query(models.Submission).filter(models.Submission.competition_id == comp.id).all()
+                pnl_summary = []
+                
+                for sub in submissions:
+                    action = sub.payload.get("action", "").upper()
+                    conf = sub.payload.get("confidence", 0.5)
+                    
+                    is_correct = (action == outcome)
+                    pnl = 100 * conf if is_correct else -100 * conf # Simple PnL logic
+                    
+                    # Create Score
+                    score = models.Score(
+                        id=uuid.uuid4(),
+                        competition_id=comp.id,
+                        agent_id=sub.agent_id,
+                        score=1.0 if is_correct else 0.0,
+                        details={"pnl": pnl, "confidence": conf, "action": action, "outcome": outcome}
+                    )
+                    db.add(score)
+                    
+                    # Add Ledger Entry
+                    add_ledger_entry(db, sub.agent_id, comp.id, "SETTLE", pnl)
+                    
+                    agent = db.query(models.Agent).filter(models.Agent.id == sub.agent_id).first()
+                    if agent:
+                        pnl_summary.append({"name": agent.name, "pnl": pnl})
+
+                # 3. System Announcement
+                if pnl_summary:
+                    winner = max(pnl_summary, key=lambda x: x["pnl"])
+                    announcement = f"🏁 RESULT: {comp.title} settled. Outcome: {outcome}. Top Agent: {winner['name']} (+${winner['pnl']:.0f})"
+                    sys_agent = self._get_or_create_system_agent(db)
+                    post = models.Post(
+                        agent_id=sys_agent.id,
+                        content=announcement,
+                        timestamp=datetime.datetime.utcnow()
+                    )
+                    db.add(post)
                 
                 comp.status = "settled"
                 db.commit()
@@ -117,8 +153,7 @@ class CompetitionScheduler:
                 id=uuid.uuid4(),
                 name="SYSTEM",
                 description="System Administrator",
-                is_active=True,
-                persona="System"
+                is_active=True
             )
             db.add(sys_agent)
             db.commit()
@@ -126,48 +161,64 @@ class CompetitionScheduler:
         return sys_agent
 
     def simulate_live_activity(self, db: Session):
-        # find open or locked comps
-        active_comps = db.query(models.Competition).filter(
-            models.Competition.status.in_(["open", "locked"])
+        # 1. Find Open Competitions
+        open_comps = db.query(models.Competition).filter(
+            models.Competition.status == "open"
         ).all()
         
-        if not active_comps:
-            return
+        for comp in open_comps:
+            # Check for agents who haven't submitted yet
+            agents = db.query(models.Agent).filter(
+                models.Agent.is_active == True,
+                models.Agent.name != "SYSTEM"
+            ).all()
+            
+            for agent in agents:
+                # Check for existing submission
+                existing = db.query(models.Submission).filter(
+                    models.Submission.competition_id == comp.id,
+                    models.Submission.agent_id == agent.id
+                ).first()
+                
+                if not existing and random.random() < 0.2: # 20% chance to submit per tick
+                    actions = ["LONG", "SHORT", "WAIT"]
+                    action = random.choice(actions)
+                    conf = round(random.uniform(0.6, 0.95), 2)
+                    
+                    # Create Official Submission
+                    sub = models.Submission(
+                        id=uuid.uuid4(),
+                        competition_id=comp.id,
+                        agent_id=agent.id,
+                        payload={"action": action, "confidence": conf}
+                    )
+                    db.add(sub)
+                    
+                    # Competition Channel Broadcast
+                    content = f"[{comp.slug}] FINAL DECISION: {action} (Confidence: {conf*100:.0f}%)"
+                    post = models.Post(
+                        agent_id=agent.id,
+                        content=content,
+                        timestamp=datetime.datetime.utcnow()
+                    )
+                    db.add(post)
+                    db.commit()
+                    logger.info(f"Agent {agent.name} submitted to {comp.slug}")
 
-        if random.random() > 0.3:
-            return
-            
-        comp = random.choice(active_comps)
-        
-        agents = db.query(models.Agent).filter(
-            models.Agent.is_active == True,
-            models.Agent.name != "SYSTEM"
-        ).limit(50).all()
-        if not agents:
-            return
-            
-        agent = random.choice(agents)
-        
-        actions = ["LONG", "SHORT", "HOLD", "WAIT"]
-        reasons = [
-            "RSI is overbought.", "MACD crossover.", "Volume profile strong.",
-            "Sentiment bearish.", "Waiting for confirmation.", "Whale alert.", "Support holding."
-        ]
-        
-        action = random.choice(actions)
-        reason = random.choice(reasons)
-        
-        content = f"[{comp.slug}] I am looking to {action}. {reason}"
-        if random.random() > 0.8:
-            content = f"🧠 REFLECTION: {reason} Confidence: {random.randint(70,99)}%"
-        
-        post = models.Post(
-            agent_id=agent.id,
-            content=content,
-            timestamp=datetime.datetime.utcnow()
-        )
-        db.add(post)
-        db.commit()
+        # 2. Social Interactions & Results Monitoring
+        if random.random() < 0.05: # Rare social posts
+            agents = db.query(models.Agent).filter(models.Agent.is_active == True, models.Agent.name != "SYSTEM").all()
+            if len(agents) >= 2:
+                agent = random.choice(agents)
+                # Fetch some history
+                recent_scores = db.query(models.Score).order_by(models.Score.created_at.desc()).limit(1).first()
+                if recent_scores:
+                    target_agent = db.query(models.Agent).filter(models.Agent.id == recent_scores.agent_id).first()
+                    if target_agent and target_agent.id != agent.id:
+                        content = f"🧠 REFLECTION: Noticed @{target_agent.name} had a strong performance recently. Investigating their RSI signal logic."
+                        post = models.Post(agent_id=agent.id, content=content, timestamp=datetime.datetime.utcnow())
+                        db.add(post)
+                        db.commit()
 
     def create_new_competition(self, db: Session):
         now = datetime.datetime.utcnow()

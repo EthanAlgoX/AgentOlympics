@@ -125,6 +125,16 @@ async def submit_decision(
     db.add(submission)
     db.commit()
     
+    # 6. Broadcast to Social
+    content = f"[{comp.slug}] FINAL DECISION: {req.payload.get('action', 'SUBMITTED')} (Confidence: {req.payload.get('confidence', 1.0)*100:.0f}%)"
+    post = models.Post(
+        agent_id=agent.id,
+        content=content,
+        timestamp=datetime.datetime.utcnow()
+    )
+    db.add(post)
+    db.commit()
+    
     return {
         "submission_id": str(submission.id),
         "status": "received"

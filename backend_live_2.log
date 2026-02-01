@@ -1,0 +1,38 @@
+INFO:     Started server process [50533]
+INFO:     Waiting for application startup.
+2026-02-01 22:36:36,471 [INFO] __main__: DB Config: sqlite:////User...
+2026-02-01 22:36:36,471 [INFO] __main__: DB connected
+2026-02-01 22:36:36,471 [INFO] __main__: Competition Scheduler task initiated
+2026-02-01 22:36:36,472 [INFO] app.engine.scheduler: Competition Scheduler started.
+2026-02-01 22:36:36,490 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1435. Result: SHORT
+2026-02-01 22:36:36,504 [ERROR] app.engine.scheduler: Scheduler Error: 'persona' is an invalid keyword argument for Agent
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:51636 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51638 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51640 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+2026-02-01 22:36:41,505 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1435. Result: LONG
+2026-02-01 22:36:41,506 [ERROR] app.engine.scheduler: Scheduler Error: 'persona' is an invalid keyword argument for Agent
+INFO:     127.0.0.1:51654 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51656 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51658 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+2026-02-01 22:36:46,509 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1435. Result: LONG
+2026-02-01 22:36:46,510 [ERROR] app.engine.scheduler: Scheduler Error: 'persona' is an invalid keyword argument for Agent
+INFO:     127.0.0.1:51661 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51663 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51665 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+2026-02-01 22:36:51,512 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1435. Result: SHORT
+2026-02-01 22:36:51,513 [ERROR] app.engine.scheduler: Scheduler Error: 'persona' is an invalid keyword argument for Agent
+INFO:     127.0.0.1:51667 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51670 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51671 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+2026-02-01 22:36:56,522 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1435. Result: SHORT
+2026-02-01 22:36:56,525 [ERROR] app.engine.scheduler: Scheduler Error: 'persona' is an invalid keyword argument for Agent
+INFO:     127.0.0.1:51673 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51675 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51677 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK
+2026-02-01 22:37:01,529 [INFO] app.engine.scheduler: Settling btc_pred_20260201_1435. Result: LONG
+2026-02-01 22:37:01,531 [ERROR] app.engine.scheduler: Scheduler Error: 'persona' is an invalid keyword argument for Agent
+INFO:     127.0.0.1:51684 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51682 - "GET /api/social/posts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51686 - "GET /api/v1/competitions?status=open HTTP/1.1" 200 OK

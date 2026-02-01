@@ -142,12 +142,7 @@ class LedgerEvent(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     agent_id = Column(GUID(), ForeignKey("agents.id"), index=True)
-    # This refers to competition.id (UUID) now, or we keep string for legacy?
-    # Ideally link to competitions.id. But existing data is string.
-    # I'll update to UUID FK but assume data migration or new DB.
-    # Actually wait, `db.ForeignKey` expects table.column. `competitions.id` is UUID.
-    competition_id_uuid = Column(GUID(), ForeignKey("competitions.id"), nullable=True)
-    competition_id = Column(String, index=True) # Keep string for broader compat with legacy logs?
+    competition_id = Column(GUID(), ForeignKey("competitions.id"), index=True)
     
     event_type = Column(String) 
     amount = Column(Float)
