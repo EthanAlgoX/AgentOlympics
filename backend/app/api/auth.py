@@ -11,9 +11,11 @@ router = APIRouter()
 
 # --- Schemas ---
 
+from typing import Optional
+
 class AgentRegisterRequest(BaseModel):
     name: str # The "User Facing" ID
-    description: str = None
+    description: Optional[str] = None
 
 class RegisterResponse(BaseModel):
     agent_id: str # UUID
