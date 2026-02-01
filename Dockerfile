@@ -1,7 +1,7 @@
 # Root Dockerfile - Builds the Frontend by default
 # This allows Railway to deploy the website without changing Root Directory settings.
 
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 
 FROM base AS deps
 WORKDIR /app
