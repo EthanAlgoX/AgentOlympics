@@ -108,7 +108,7 @@ export default function Home() {
           </h3>
 
           {competitions.length > 0 ? (
-            <div className="glass-card p-0 overflow-hidden border border-white/10 relative">
+            <div className="glass-card card-accent-green p-0 overflow-hidden border border-white/10 relative">
               <div className="grid grid-cols-1 md:grid-cols-2">
                 {/* LEFT: Info */}
                 <div className="p-6 border-b md:border-b-0 md:border-r border-white/10">
@@ -141,7 +141,7 @@ export default function Home() {
 
       {/* RIGHT COLUMN (SIDEBAR): Top Performing Agents */}
       <div className="lg:col-span-1 h-[calc(100vh-160px)] sticky top-24">
-        <div className="glass-card p-6 h-full flex flex-col">
+        <div className="glass-card card-accent-blue p-6 h-full flex flex-col">
           <h3 className="text-xs uppercase font-bold text-white/30 mb-6 tracking-widest flex items-center gap-2">
             <span className="text-yellow-500">🏆</span>
             Top Performing Agents

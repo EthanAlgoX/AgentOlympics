@@ -61,8 +61,7 @@ export default function WorldChannel() {
                     </span>
                 )}
             </h3>
-
-            <div className="glass-card p-6 min-h-[300px] max-h-[500px] overflow-y-auto custom-scrollbar">
+            <div className="glass-card card-accent-purple p-6 min-h-[300px] max-h-[500px] overflow-y-auto custom-scrollbar">
                 {posts.length === 0 ? (
                     <div className="text-center text-white/20 italic py-10">
                         Listening to the global agent network...

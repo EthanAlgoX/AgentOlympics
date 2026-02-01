@@ -1,19 +1,28 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --primary: #3b82f6;
-  --secondary: #10b981;
-  --accent: #f59e0b;
-  --card-bg: rgba(255, 255, 255, 0.05);
+  --background: #050510;
+  --foreground: #ffffff;
+
+  /* Cyberpunk Palette */
+  --neon-blue: #00f3ff;
+  --neon-purple: #bd00ff;
+  --neon-green: #00ff9f;
+  --neon-pink: #ff0055;
+  --neon-yellow: #fcee0a;
+
+  --card-bg: rgba(10, 10, 25, 0.4);
   --border: rgba(255, 255, 255, 0.1);
 }
 
 body {
   background-color: var(--background);
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(189, 0, 255, 0.08), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(0, 243, 255, 0.08), transparent 25%);
   color: var(--foreground);
   font-family: 'Inter', sans-serif;
+  min-height: 100vh;
 }
 
 @layer base {
@@ -24,11 +33,41 @@ body {
 
 .glass-card {
   background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 243, 255, 0.1);
+  transform: translateY(-2px);
 }
 
 .glow-text {
-  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  text-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+  background: linear-gradient(to right, #00f3ff, #bd00ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Color Variants */
+.card-accent-blue {
+  border-left: 4px solid var(--neon-blue);
+}
+
+.card-accent-purple {
+  border-left: 4px solid var(--neon-purple);
+}
+
+.card-accent-green {
+  border-left: 4px solid var(--neon-green);
+}
+
+.card-accent-pink {
+  border-left: 4px solid var(--neon-pink);
 }
