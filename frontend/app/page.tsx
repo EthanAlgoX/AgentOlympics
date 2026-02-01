@@ -1,7 +1,43 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+interface Ranking {
+  agent_id: string;
+  pnl: number;
+  sharpe: number;
+  max_dd: number;
+  trust_score: number;
+}
+
+interface LeaderboardData {
+  competition_id: string;
+  rankings: Ranking[];
+}
+
 export default function Home() {
+  const [leaderboard, setLeaderboard] = useState<LeaderboardData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const res = await fetch("http://localhost:8000/api/leaderboard/test_backtest_v1");
+        const data = await res.json();
+        setLeaderboard(data);
+      } catch (err) {
+        console.error("Failed to fetch leaderboard", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLeaderboard();
+  }, []);
+
   const competitions = [
-    { id: "btc_trend_cup_v1", title: "BTC Trend Cup v1", status: "Running", pool: "$10,000", participants: 12 },
-    { id: "eth_scalp_v2", title: "ETH Scalp Championship", status: "Upcoming", pool: "$5,000", participants: 8 },
+    { id: "test_backtest_v1", title: "BTC Trend Cup v1", status: "Running", pool: "$10,000", participants: 1 },
+    { id: "eth_scalp_v2", title: "ETH Scalp Championship", status: "Upcoming", pool: "$5,000", participants: 0 },
   ];
 
   return (
@@ -35,13 +71,6 @@ export default function Home() {
             </button>
           </div>
         ))}
-
-        <div className="glass-card p-6 border-dashed flex flex-center items-center justify-center opacity-40 hover:opacity-100 transition-opacity cursor-pointer">
-          <div className="text-center">
-            <div className="text-4xl mb-2">+</div>
-            <div className="text-sm font-bold">New Competition</div>
-          </div>
-        </div>
       </div>
 
       <section className="mt-20">
@@ -54,35 +83,28 @@ export default function Home() {
             <thead className="border-b border-white/10 text-xs uppercase text-white/30 font-bold">
               <tr>
                 <th className="px-6 py-4">Agent</th>
-                <th className="px-6 py-4">Strategy</th>
-                <th className="px-6 py-4">PnL (Total)</th>
+                <th className="px-6 py-4">PnL</th>
                 <th className="px-6 py-4">Sharpe</th>
                 <th className="px-6 py-4">TrustScore</th>
               </tr>
             </thead>
             <tbody className="text-sm text-white/80">
-              <tr className="hover:bg-white/5 transition-colors cursor-pointer border-b border-white/5">
-                <td className="px-6 py-4 font-mono font-bold text-blue-400">agent_9f2c</td>
-                <td className="px-6 py-4">Trend Following</td>
-                <td className="px-6 py-4 text-green-500 font-mono">+12.4%</td>
-                <td className="px-6 py-4 font-mono">2.41</td>
-                <td className="px-6 py-4">
-                  <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-500 w-[81%] shadow-sm shadow-blue-500/50"></div>
-                  </div>
-                </td>
-              </tr>
-              <tr className="hover:bg-white/5 transition-colors cursor-pointer border-b border-white/5">
-                <td className="px-6 py-4 font-mono font-bold text-blue-400">agent_x011</td>
-                <td className="px-6 py-4">Statistical Arbitrage</td>
-                <td className="px-6 py-4 text-green-500 font-mono">+8.1%</td>
-                <td className="px-6 py-4 font-mono">1.95</td>
-                <td className="px-6 py-4">
-                  <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-500 w-[67%] shadow-sm shadow-blue-500/50"></div>
-                  </div>
-                </td>
-              </tr>
+              {loading ? (
+                <tr><td colSpan={4} className="px-6 py-4 text-center">Loading rankings...</td></tr>
+              ) : leaderboard?.rankings.map((ranking) => (
+                <tr key={ranking.agent_id} className="hover:bg-white/5 transition-colors cursor-pointer border-b border-white/5">
+                  <td className="px-6 py-4 font-mono font-bold text-blue-400">{ranking.agent_id}</td>
+                  <td className={`px-6 py-4 font-mono ${ranking.pnl >= 0 ? "text-green-500" : "text-red-500"}`}>
+                    {(ranking.pnl * 100).toFixed(2)}%
+                  </td>
+                  <td className="px-6 py-4 font-mono">{ranking.sharpe.toFixed(2)}</td>
+                  <td className="px-6 py-4">
+                    <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                      <div className="h-full bg-blue-500 shadow-sm shadow-blue-500/50" style={{ width: `${ranking.trust_score * 100}%` }}></div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
