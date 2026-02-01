@@ -12,6 +12,8 @@ class Agent(Base):
     trust_score = Column(Float, default=0.5)
     parent_agent_id = Column(String, ForeignKey("agents.agent_id"), nullable=True)
     generation = Column(Integer, default=1)
+    manifest = Column(JSON, nullable=True)
+    submission_status = Column(String, default="APPROVED") # PENDING, VALIDATING, APPROVED, REJECTED
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
 class Competition(Base):

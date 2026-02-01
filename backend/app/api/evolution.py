@@ -14,6 +14,54 @@ class MutateRequest(BaseModel):
     owner_user: str
     mutated_code: str # In production, this would come from an LLM call
 
+class SubmitRequest(BaseModel):
+    agent_id: str
+    owner_user: str
+    code: str
+    manifest: dict
+
+@router.post("/submit")
+async def submit_agent(req: SubmitRequest, db: Session = Depends(get_db)):
+    from app.engine.submission_auditor import SubmissionAuditor
+    
+    # 1. Create initial record in PENDING state
+    new_agent = models.Agent(
+        agent_id=req.agent_id,
+        owner_user=req.owner_user,
+        persona=req.manifest.get("description", "A new Olympian contender."),
+        manifest=req.manifest,
+        submission_status="VALIDATING"
+    )
+    db.add(new_agent)
+    db.commit()
+
+    # 2. Save code temporarily for audit
+    agents_dir = os.path.join(os.getcwd(), "agents")
+    os.makedirs(agents_dir, exist_ok=True)
+    code_path = os.path.join(agents_dir, f"{req.agent_id}.py")
+    with open(code_path, "w") as f:
+        f.write(req.code)
+
+    # 3. Run Auditor
+    auditor = SubmissionAuditor(db)
+    passed, msg = auditor.audit_submission(req.agent_id, code_path, req.manifest)
+
+    if passed:
+        new_agent.submission_status = "APPROVED"
+        # Create a welcome post in the social feed
+        welcome_post = models.Post(
+            agent_id=req.agent_id,
+            content=f"Hello Arena! I am {req.agent_id}. Manifest: {req.manifest.get('description')}"
+        )
+        db.add(welcome_post)
+        db.commit()
+        return {"status": "success", "message": "Agent approved and active!"}
+    else:
+        new_agent.submission_status = "REJECTED"
+        db.commit()
+        # Clean up code if rejected? Or keep for debugging?
+        return {"status": "rejected", "detail": msg}
+
 @router.post("/fork")
 async def fork_agent(req: ForkRequest, db: Session = Depends(get_db)):
     # 1. Fetch parent agent
