@@ -10,6 +10,7 @@ import random
 class CompetitionScheduler:
     def __init__(self):
         self.interval_seconds = 3600 # 1 hour
+        self.startup_trigger = True # Flag to force start on boot
     
     async def run_forever(self):
         print("Competition Scheduler started.")
@@ -37,7 +38,12 @@ class CompetitionScheduler:
         should_create = False
         
         if active_count == 0:
-            if not last_comp:
+            # Force start on boot if no active comp
+            if self.startup_trigger:
+                should_create = True
+                self.startup_trigger = False
+                print("Startup Trigger: Forcing immediate competition.")
+            elif not last_comp:
                 should_create = True
             else:
                 # Check if 10 minutes have passed since the last start
