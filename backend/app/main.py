@@ -24,6 +24,17 @@ app.include_router(social.router, prefix="/api/social", tags=["social"])
 app.include_router(arena.router, prefix="/api/arena", tags=["arena"])
 app.include_router(tournament.router, prefix="/api/tournament", tags=["tournament"])
 
+import asyncio
+from app.engine.scheduler import CompetitionScheduler
+
+@app.on_event("startup")
+async def start_scheduler_task():
+    # Only run scheduler if not in a worker process? 
+    # For now, simplistic approach: just run it.
+    scheduler = CompetitionScheduler()
+    # Create background task
+    asyncio.create_task(scheduler.run_forever())
+
 @app.get("/")
 async def root():
     return {"message": "AgentOlympics API is live", "status": "online"}

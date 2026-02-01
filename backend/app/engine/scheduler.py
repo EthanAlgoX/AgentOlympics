@@ -26,17 +26,21 @@ class CompetitionScheduler:
     def manage_lifecycles(self, db: Session):
         now = datetime.datetime.utcnow()
         
-        # 1. Create new competition if none active/upcoming
-        active_count = db.query(models.Competition).filter(
-            models.Competition.status.in_(["CREATED", "OPEN_FOR_REGISTRATION"])
-        ).count()
+        # 1. Schedule New Competition (Every 10 minutes)
+        last_comp = db.query(models.Competition).order_by(models.Competition.start_time.desc()).first()
+        should_create = False
         
-        if active_count == 0:
-            # Randomly decide between a regular Alpha Pool or an Adversarial Duel
-            if random.random() > 0.7:
-                self.schedule_adversarial_duel(db)
-            else:
-                self.create_new_competition(db)
+        if not last_comp:
+            should_create = True
+        else:
+            # Check if 10 minutes have passed since the last start
+            delta = now - last_comp.start_time
+            if delta.total_seconds() >= 600:
+                should_create = True
+
+        if should_create:
+            # Always create the 10-min prediction competition as requested
+            self.create_new_competition(db)
 
         # 2. Transition CREATED -> OPEN_FOR_REGISTRATION
         # (Simple logic: immediate for MVP)
@@ -69,18 +73,22 @@ class CompetitionScheduler:
                         price_start, price_end = 50000, 51000 # Mock prices
                         engine.settle_duel(comp.competition_id, adv[0], adv[1], price_start, price_end)
                 else:
-                    # Regular Alpha Pool settlement (already in Phase 5)
-                    # For briefing, we call the regular settlement logic here
+                    # Regular Alpha Pool settlement
                     pass
                 comp.status = "SETTLED"
                 db.commit()
 
     def create_new_competition(self, db: Session):
         now = datetime.datetime.utcnow()
-        comp_id = f"btc_dir_{now.strftime('%Y%m%d_%H%M')}"
+        comp_id = f"btc_pred_{now.strftime('%Y%m%d_%H%M')}"
         
-        deadline = now + datetime.timedelta(minutes=25)
-        settlement = now + datetime.timedelta(minutes=30)
+        # 10 minute cycle
+        deadline = now + datetime.timedelta(minutes=8) # Decisions due in 8 mins
+        settlement = now + datetime.timedelta(minutes=10) # Settles in 10 mins
+        
+        # Prize: 1000 - 2000, multiple of 1000
+        prize_int = random.choice([1000, 2000])
+        prize_str = f"{prize_int} USD"
         
         new_comp = models.Competition(
             competition_id=comp_id,
@@ -89,17 +97,19 @@ class CompetitionScheduler:
             end_time=settlement,
             status="CREATED",
             rules={
+                "description": f"10-Min BTC Prediction. Win share of {prize_str}!",
+                "prize_pool": prize_str,
                 "decision_deadline": deadline.isoformat() + "Z",
                 "settlement_time": settlement.isoformat() + "Z",
                 "initial_capital": 10000,
-                "max_stake_ratio": 0.3,
+                "max_stake_ratio": 1.0,
                 "fee_rate": 0.0005,
                 "allowed_actions": ["OPEN_LONG", "OPEN_SHORT", "WAIT"]
             }
         )
         db.add(new_comp)
         db.commit()
-        print(f"New competition created: {comp_id}")
+        print(f"New competition created: {comp_id} (Prize: {prize_str})")
 
     def schedule_adversarial_duel(self, db: Session):
         """
