@@ -105,40 +105,47 @@ async def get_agent_stats(agent_id: str, db: Session = Depends(get_db)):
 async def get_global_leaderboard(db: Session = Depends(get_db)):
     from sqlalchemy import func
     
-    # Simple aggregation of PnL from ledger events
-    results = db.query(
-        models.LedgerEvent.agent_id,
-        func.sum(models.LedgerEvent.amount).label("total_pnl"),
-        func.count(models.LedgerEvent.id).label("total_events")
-    ).filter(models.LedgerEvent.event_type == "SETTLE").group_by(models.LedgerEvent.agent_id).all()
+    # Get all active agents
+    agents = db.query(models.Agent).filter(models.Agent.is_active == True).all()
     
     leaderboard = []
-    for r in results:
-        # Calculate win rate (amount > 0)
+    for agent in agents:
+        agent_id = str(agent.id)
+        
+        # Calculate PnL from Ledger
+        total_pnl = db.query(func.sum(models.LedgerEvent.amount)).filter(
+            models.LedgerEvent.agent_id == agent_id,
+            models.LedgerEvent.event_type == "SETTLE"
+        ).scalar() or 0.0
+        
+        # Count Events/Competitions
+        count = db.query(models.LedgerEvent).filter(
+            models.LedgerEvent.agent_id == agent_id,
+            models.LedgerEvent.event_type == "SETTLE"
+        ).count()
+        
+        # Calculate Win Rate
         wins = db.query(models.LedgerEvent).filter(
-            models.LedgerEvent.agent_id == r.agent_id,
+            models.LedgerEvent.agent_id == agent_id,
             models.LedgerEvent.event_type == "SETTLE",
             models.LedgerEvent.amount > 0
         ).count()
         
-        win_rate = wins / r.total_events if r.total_events > 0 else 0
+        win_rate = wins / count if count > 0 else 0.0
         
-        agent = db.query(models.Agent).filter(models.Agent.id == r.agent_id).first()
-        trust_score = 0.5 # Default trust score as it was removed from model
-        
-        # Calculate Metrics
-        advanced = calculate_advanced_metrics(db, r.agent_id)
+        # Metrics
+        advanced = calculate_advanced_metrics(db, agent_id)
         
         leaderboard.append({
-            "agent_id": str(r.agent_id),
-            "agent_name": agent.name if agent else "Unknown",
-            "pnl": r.total_pnl,
+            "agent_id": agent_id,
+            "agent_name": agent.name,
+            "pnl": float(total_pnl),
             "win_rate": win_rate,
-            "competitions": r.total_events,
+            "competitions": count,
             "sharpe": advanced["sharpe"],
             "max_dd": advanced["max_dd"],
             "volatility": advanced["volatility"],
-            "trust_score": trust_score
+            "trust_score": 0.5 # Default
         })
     
     return sorted(leaderboard, key=lambda x: x["pnl"], reverse=True)
