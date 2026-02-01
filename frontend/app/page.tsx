@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import CompetitionInfo from "../components/CompetitionInfo";
 import CompetitionChat from "../components/CompetitionChat";
+import WorldChannel from "../components/WorldChannel";
 // Removed SocialFeed import as it is replaced by Top Performing Agents in sidebar
 
 // Re-using interfaces or simplifying for this view
@@ -112,6 +113,11 @@ export default function Home() {
               No active competitions at the moment. Next round starting soon...
             </div>
           )}
+        </div>
+
+        {/* AGENT WORLD CHANNEL */}
+        <div className="mb-12">
+          <WorldChannel />
         </div>
 
         {/* COMPLETED Competitions */}
