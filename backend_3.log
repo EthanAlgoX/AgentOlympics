@@ -2,3 +2,33 @@ INFO:     Started server process [24662]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:57260 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57262 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57260 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57270 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57262 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57260 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57270 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57262 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57279 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57280 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57282 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57284 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57291 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57290 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57296 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57298 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57303 - "GET /api/agents/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57303 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57307 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57311 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57311 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57317 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57323 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57325 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57333 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57331 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57344 - "GET /api/arena/list HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57343 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57347 - "GET /api/leaderboard/global/ranking HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57349 - "GET /api/arena/list HTTP/1.1" 200 OK
