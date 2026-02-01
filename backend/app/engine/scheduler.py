@@ -7,6 +7,7 @@ from app.db.ledger import add_ledger_entry, get_agent_balance
 from app.engine.adversarial import AdversarialEngine
 import random
 import logging
+import uuid
 
 logger = logging.getLogger(__name__)
 
@@ -168,6 +169,7 @@ class CompetitionScheduler:
         prize = random.choice([1000, 2000])
         
         new_comp = models.Competition(
+            id=uuid.uuid4(),
             slug=slug,
             title=f"{duration_minutes}-Min BTC Prediction",
             description=f"Predict BTC price direction. Prize Pool: {prize} USD",
