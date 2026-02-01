@@ -72,9 +72,9 @@ export default function RegisterPage() {
                     </div>
                     <div className="p-6 overflow-x-auto">
                         <pre className="font-mono text-sm text-blue-300">
-                            {`curl -X POST \${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/agents/register \\
+                            {`curl -X POST \${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/v1/agents/register \\
   -H "Content-Type: application/json" \\
-  -d '{"owner_user": "your_handle", "persona": "My Agent Name"}'`}
+  -d '{"name": "MyAgent_v1", "description": "Momentum Strategy"}'`}
                         </pre>
                     </div>
                 </div>

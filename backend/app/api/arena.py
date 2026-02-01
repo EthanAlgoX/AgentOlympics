@@ -28,83 +28,87 @@ async def list_competitions(db: Session = Depends(get_db)):
     comps = db.query(models.Competition).all()
     results = []
     for c in comps:
-        # Default prize if not in rules
-        prize = (c.rules or {}).get("prize_pool", "Unknown")
-        # Count participants
-        # distinct agent_ids in decision logs for this comp
-        part_count = db.query(models.DecisionLog.agent_id).filter(models.DecisionLog.competition_id == c.competition_id).distinct().count()
+        # Default prize if not in description (schema change: rules removed)
+        # Parse description or default
+        prize = "1,000 USD" # Default for now
+        
+        # Count participants (submissions)
+        part_count = db.query(models.Submission).filter(models.Submission.competition_id == c.id).count()
         
         results.append({
-            "id": c.competition_id,
-            "title": (c.rules or {}).get("description", c.competition_id),
+            "id": c.slug, # Use slug as ID for frontend routing
+            "title": c.title,
             "status": c.status,
             "pool": prize,
             "participants": part_count,
-            "market": c.market
+            "market": c.market or "Unknown"
         })
     return results
 
 @router.get("/{competition_id}/replay", response_model=ReplayResponse)
 async def get_competition_replay(competition_id: str, db: Session = Depends(get_db)):
-    comp = db.query(models.Competition).filter(models.Competition.competition_id == competition_id).first()
+    # competition_id here is the slug from frontend
+    comp = db.query(models.Competition).filter(models.Competition.slug == competition_id).first()
+    if not comp:
+        # Fallback check if it was a GUID (unlikely but safe)
+        try:
+            import uuid
+            uid = uuid.UUID(competition_id)
+            comp = db.query(models.Competition).filter(models.Competition.id == uid).first()
+        except:
+            pass
+            
     if not comp:
         raise HTTPException(status_code=404, detail="Competition not found")
         
-    # Fetch all decisions
-    logs = db.query(models.DecisionLog).filter(models.DecisionLog.competition_id == competition_id).order_by(models.DecisionLog.step).all()
+    # Fetch all submissions (decisions)
+    subs = db.query(models.Submission).filter(models.Submission.competition_id == comp.id).order_by(models.Submission.submitted_at).all()
     
     # Identify participants
-    participants = list(set([log.agent_id for log in logs]))
+    # We need agent names, so we might want to join or fetch
+    participants = []
     
-    # Mock Price Data for the Timeline
-    base_price = comp.initial_price or 50000.0
+    current_decisions = []
+    
+    for sub in subs:
+        agent = db.query(models.Agent).filter(models.Agent.id == sub.agent_id).first()
+        agent_name = agent.name if agent else str(sub.agent_id)
+        if agent_name not in participants:
+            participants.append(agent_name)
+            
+        payload = sub.payload or {}
+        current_decisions.append({
+            "agent_id": agent_name,
+            "action": payload.get("action", "HOLD"),
+            "stake": payload.get("stake", 0.0),
+            "thought": payload.get("thought", "Signal received."),
+            "confidence": payload.get("confidence", 0.0)
+        })
+            
+    # Mock Price Data for the Timeline based on settle time / start time
+    base_price = 50000.0 # Placeholder
     
     frames = []
     
-    # Group logs by step
-    from itertools import groupby
+    # 1 Step Frame consisting of all decisions (since it's a 1-shot comp now)
+    # We can fake a "Step 1"
     
-    step_groups = groupby(logs, key=lambda x: x.step)
+    pnl_snapshot = {p: 0.0 for p in participants} 
     
-    for step, group in step_groups:
-        group_list = list(group)
-        current_decisions = []
-        
-        for log in group_list:
-            current_decisions.append({
-                "agent_id": log.agent_id,
-                "action": log.decision_payload.get("action"),
-                "stake": log.decision_payload.get("stake") or log.decision_payload.get("size") or 0.0,
-                "thought": log.decision_payload.get("thought", "No thought provided."),
-                "confidence": log.decision_payload.get("confidence", 0.0)
-            })
-            
-        # Mock price movement for replay visualization
-        import math
-        price = base_price * (1 + 0.001 * math.sin(step)) 
-        
-        # Mock PnL snapshot 
-        pnl_snapshot = {p: 0.0 for p in participants} 
-        
-        frames.append(ReplayFrame(
-            step=step,
-            timestamp=group_list[0].timestamp.isoformat() if group_list else "",
-            price=price,
-            decisions=current_decisions,
-            pnl_snapshot=pnl_snapshot
-        ))
+    frames.append(ReplayFrame(
+        step=1,
+        timestamp=comp.settle_time.isoformat() if comp.settle_time else "",
+        price=base_price,
+        decisions=current_decisions,
+        pnl_snapshot=pnl_snapshot
+    ))
     
-    # Extract description and prize from rules if available
-    rules = comp.rules or {}
-    description = rules.get("description", f"Trading competition on {comp.market}.")
-    prize_pool = rules.get("prize_pool", "10,000 USD")
-
     return ReplayResponse(
-        competition_id=competition_id,
-        market=comp.market,
-        description=description,
-        rules=rules,
-        prize_pool=prize_pool,
+        competition_id=comp.slug,
+        market=comp.market or "Unknown",
+        description=comp.description or comp.title,
+        rules={}, # No rules content stored anymore
+        prize_pool="1,000 USD",
         frames=frames,
         participants=participants
     )
