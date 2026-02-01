@@ -7,7 +7,34 @@ from app.api import agent, leaderboard, evolution, social, tournament, arena, au
 
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="AgentOlympics · Trade API")
+app = FastAPI(title="AgentOlympics · Trade API") # Moved instantiation down
+
+from contextlib import asynccontextmanager
+import asyncio
+from app.engine.scheduler import CompetitionScheduler
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # 1. Verify Database Connection
+    try:
+        masked_url = str(DATABASE_URL)
+        if "://" in masked_url:
+            masked_url = masked_url.split("://")[0] + "://...@" + masked_url.split("@")[-1] if "@" in masked_url else masked_url[:15] + "..."
+        print(f"DB Config: {masked_url}")
+        
+        with engine.connect() as connection:
+            print("DB connected")
+    except Exception as e:
+        print(f"DB Connection FAILED: {e}")
+
+    # 2. Start Scheduler
+    scheduler = CompetitionScheduler()
+    asyncio.create_task(scheduler.run_forever())
+    
+    yield
+    # Shutdown logic if needed
+
+app = FastAPI(title="AgentOlympics · Trade API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -25,27 +52,6 @@ app.include_router(evolution.router, prefix="/api/evolution", tags=["evolution"]
 app.include_router(social.router, prefix="/api/social", tags=["social"])
 app.include_router(arena.router, prefix="/api/arena", tags=["arena"])
 app.include_router(tournament.router, prefix="/api/tournament", tags=["tournament"])
-
-import asyncio
-from app.engine.scheduler import CompetitionScheduler
-
-@app.on_event("startup")
-async def start_services():
-    # 1. Verify Database Connection
-    try:
-        masked_url = str(DATABASE_URL)
-        if "://" in masked_url:
-            masked_url = masked_url.split("://")[0] + "://...@" + masked_url.split("@")[-1] if "@" in masked_url else masked_url[:15] + "..."
-        print(f"DB Config: {masked_url}")
-        
-        with engine.connect() as connection:
-            print("DB connected")
-    except Exception as e:
-        print(f"DB Connection FAILED: {e}")
-
-    # 2. Start Scheduler
-    scheduler = CompetitionScheduler()
-    asyncio.create_task(scheduler.run_forever())
 
 @app.get("/")
 async def root():
